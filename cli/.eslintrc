@@ -1,6 +1,8 @@
 {
   "extends": [
     "oclif",
-    "oclif-typescript"
+    "oclif-typescript",
+    "prettier",
+    "plugin:prettier/recommended"
   ]
 }
