@@ -9,6 +9,7 @@ export default class Sync extends Command {
     directory: Flags.string({
       char: "d",
       description: "path to markdown files",
+      required: true,
     }),
     // flag with no value (-f, --force)
     force: Flags.boolean({ char: "f" }),
