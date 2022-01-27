@@ -60,6 +60,7 @@
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
+    "watch": "shx rm -rf dist && tsc -b --watch",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
