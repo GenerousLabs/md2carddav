@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { getFilesFromPath } from "../services/files.service";
+import { getFilesFromPath } from "../services/files/files.service";
 
 export default class Sync extends Command {
   static description = "Sync from markdown to CardDAV";
