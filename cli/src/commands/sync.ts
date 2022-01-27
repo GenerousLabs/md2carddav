@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+import { getFilesFromPath } from "../services/files.service";
 
 export default class Sync extends Command {
   static description = "Sync from markdown to CardDAV";
@@ -20,6 +21,9 @@ export default class Sync extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Sync);
 
-    this.log("Works", { args, flags });
+    const files = await getFilesFromPath(flags.directory);
+
+    this.log(`Works #3JvfHi`);
+    this.log(`Found ${files.length} files.`);
   }
 }
