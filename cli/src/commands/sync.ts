@@ -19,7 +19,7 @@ export default class Sync extends Command {
   static args = [];
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Sync);
+    const { flags } = await this.parse(Sync);
 
     const files = await getFilesFromPath(flags.directory);
 
