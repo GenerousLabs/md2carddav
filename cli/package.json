@@ -7,7 +7,7 @@
     "md2carddav": "./bin/run"
   },
   "homepage": "https://github.com/GenerousLabs/md2carddav",
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "main": "dist/index.js",
   "repository": "GenerousLabs/md2carddav",
   "files": [
