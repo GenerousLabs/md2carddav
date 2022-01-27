@@ -21,6 +21,7 @@
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
     "fs-jetpack": "^4.3.1",
+    "gray-matter": "^4.0.3",
     "readdirp": "^3.6.0"
   },
   "devDependencies": {
