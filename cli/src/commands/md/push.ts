@@ -37,21 +37,26 @@ export default class MdPush extends Command {
     this.debug("got context #5mjOU9");
     this.debug(context);
 
-    const vcards = await getVCards(context);
-    this.debug("Got vcards #Oh7EXz", vcards);
+    const { account, addressBooks } = await getVCards(context);
+    this.debug("Got vcards #Oh7EXz", account, addressBooks);
 
-    const addressBook = vcards[syncAddressBookDisplayName];
+    const addressBook = addressBooks.find(
+      ({ displayName }) => displayName === syncAddressBookDisplayName
+    );
+
     if (typeof addressBook === "undefined") {
       this.error(
         "Cannot find address book that matches syncAddressBookDisplayName. #ewDxnI"
       );
     }
 
+    const { vcards } = addressBook;
+
     const contacts = await getMdContacts(context);
     this.debug("Got contacts #iI2F1l", contacts);
 
     for (const contact of contacts) {
-      const existingVcard = addressBook.find(
+      const existingVcard = vcards.find(
         (vcard) => vcard.uid === contact.contact.vcf_uid
       );
       if (typeof existingVcard === "undefined") {

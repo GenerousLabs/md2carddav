@@ -25,13 +25,19 @@ export default class CarddavFetch extends Command {
 
     const context = await getContext(this);
 
-    const vcards = await getVCards(context);
+    const { addressBooks } = await getVCards(context);
 
     // eslint-disable-next-line guard-for-in
-    for (const key in vcards) {
-      const slug = slugify(key);
-      const expandedVcards = vcards[slug];
-      for (const card of expandedVcards) {
+    for (const addressBook of addressBooks) {
+      const { vcards, displayName } = addressBook;
+
+      if (typeof displayName === "undefined") {
+        this.warn("Found address book without display name. #1kyeDg");
+        continue;
+      }
+
+      const slug = slugify(displayName);
+      for (const card of vcards) {
         if (typeof card.vcard.data !== "string") {
           this.warn("Found vcard without data. #tTKwcI");
           this.debug(card);
@@ -50,7 +56,7 @@ export default class CarddavFetch extends Command {
       }
     }
 
-    this.debug("Got vcards #VHvQJe");
-    this.debug(vcards);
+    this.debug("Got addressBooks with vcards #VHvQJe");
+    this.debug(addressBooks);
   }
 }
