@@ -51,9 +51,17 @@ export const getContext = async (
 
   return {
     log: (...args) => _this.log.apply(_this, args as any),
+    warn: (...args) => _this.warn.apply(_this, args as any),
     error: (...args) => _this.error.apply(_this, args as any),
     // We need to assign because debug is protected
     debug: (_this as any).debug,
     config,
   };
+};
+
+// oclif ships debug, but it's not typed as the full `debug` module, and
+// sometimes it's a noopfunction, so we engage in this hackery to be able to
+// extend it easily
+export const extendDebugIfPossible = <T>(debug: T, name: string): T => {
+  return "extend" in debug ? (debug as any).extend(name) : debug;
 };

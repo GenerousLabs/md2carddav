@@ -1,5 +1,6 @@
 import { EntryInfo } from "readdirp";
 import { CommandContext } from "../../shared.types";
+import { extendDebugIfPossible } from "../../shared.utils";
 import {
   Contact,
   getContactFromYamlFrontmatterData,
@@ -17,11 +18,14 @@ export const getMdContacts = async (
   }[]
 > => {
   const {
-    debug,
+    debug: parentDebug,
+    warn,
     config: {
       md: { directory, fileFilter },
     },
   } = context;
+
+  const debug = extendDebugIfPossible(parentDebug, "getMdContacts");
 
   const files = await getFilesFromPath(directory, fileFilter || ["*.md"]);
 
@@ -36,7 +40,9 @@ export const getMdContacts = async (
 
       const matter = parseMarkdown(markdownResult.result);
       const contactResult = getContactFromYamlFrontmatterData(matter.data);
+
       if (!contactResult.success) {
+        warn(`File is not a valid contact #rj8vqW ${file.fullPath}`);
         return { file };
       }
 

@@ -16,7 +16,7 @@ export type SuccessResult<Returns> = {
 
 export type Returns<RT> = ErrorResult | SuccessResult<RT>;
 
-export type CommandContext = Pick<Command, "log" | "error"> & {
+export type CommandContext = Pick<Command, "log" | "warn" | "error"> & {
   debug(...args: any[]): void;
   config: z.infer<typeof ConfigSchema>;
 };

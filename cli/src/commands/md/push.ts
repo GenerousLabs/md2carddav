@@ -60,7 +60,7 @@ export default class MdPush extends Command {
     const { vcards } = addressBook;
 
     const contacts = await getMdContacts(context);
-    this.debug("Got contacts #iI2F1l", contacts);
+    this.debug("Got contacts #iI2F1l", contacts.length, contacts);
 
     const { client } = clientAndAccount;
 
@@ -73,7 +73,7 @@ export default class MdPush extends Command {
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
 
       if (typeof existingVcard === "undefined") {
-        this.debug("Did not find existing vcard to update #HriKMD");
+        this.debug("Did not find existing vcard to update #HriKMD", uid);
 
         // eslint-disable-next-line no-await-in-loop
         const result = await client.createVCard({
@@ -83,28 +83,35 @@ export default class MdPush extends Command {
         });
 
         if (!result.ok) {
-          this.debug("Failed to push vcf #bifKkH", result);
+          this.debug("Failed to push vcf #bifKkH", uid, result);
           this.error("Failed to push vcf #E5ysfm");
         }
-      } else {
-        this.debug("Found existing vcard to update #svKzvh");
 
-        // eslint-disable-next-line no-await-in-loop
-        const result = await client.updateVCard({
-          vCard: {
-            url: existingVcard.vcard.url,
-            etag: existingVcard.vcard.etag,
-            data: vcard,
-          },
-        });
-
-        if (!result.ok) {
-          this.debug("Failed to update vcf #4Xb28G", result);
-          this.error("Failed to update vcf #6TqyU3");
-        }
-
-        this.debug("Successfully updated vcard #V6VG0x", vcard, result);
+        return;
       }
+
+      this.debug("Found existing vcard to update #svKzvh", uid);
+
+      if (vcard === existingVcard.vcard.data) {
+        this.debug("No changes in vcard, skipping update #B07yJK", uid);
+        return;
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const result = await client.updateVCard({
+        vCard: {
+          url: existingVcard.vcard.url,
+          etag: existingVcard.vcard.etag,
+          data: vcard,
+        },
+      });
+
+      if (!result.ok) {
+        this.debug("Failed to update vcf #4Xb28G", uid, result);
+        this.error("Failed to update vcf #6TqyU3");
+      }
+
+      this.debug("Successfully updated vcard #V6VG0x", uid, vcard, result);
     }
   }
 }
