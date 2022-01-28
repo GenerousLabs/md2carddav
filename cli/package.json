@@ -20,11 +20,13 @@
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
+    "cosmiconfig": "^7.0.1",
     "fs-jetpack": "^4.3.1",
     "gray-matter": "^4.0.3",
     "readdirp": "^3.6.0",
     "slugify": "^1.6.5",
-    "tsdav": "^2.0.0-rc.1"
+    "tsdav": "^2.0.0-rc.1",
+    "zod": "^3.11.6"
   },
   "devDependencies": {
     "@oclif/test": "^2",
