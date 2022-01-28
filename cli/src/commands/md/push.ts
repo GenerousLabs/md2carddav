@@ -1,4 +1,6 @@
 import { Command, Flags } from "@oclif/core";
+import { getVcards } from "../../services/carddav/carddav.service";
+import { getContext } from "../../shared.utils";
 
 export default class MdPush extends Command {
   static description = "describe the command here";
@@ -17,10 +19,10 @@ export default class MdPush extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(MdPush);
 
-    const name = flags.name ?? "world";
-    this.log(`hello ${name}`);
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`);
-    }
+    const context = await getContext(this);
+
+    const vcards = await getVcards(context);
+
+    // const contacts = await getcont;
   }
 }

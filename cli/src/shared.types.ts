@@ -1,3 +1,5 @@
+import { Command } from "@oclif/core";
+
 export type ErrorResult = {
   success: false;
   error: string;
@@ -10,3 +12,7 @@ export type SuccessResult<Returns> = {
 };
 
 export type Returns<RT> = ErrorResult | SuccessResult<RT>;
+
+export type CommandContext = Pick<Command, "log" | "error"> & {
+  debug(...args: any[]): void;
+};
