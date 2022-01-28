@@ -48,7 +48,7 @@ export default class CarddavFetch extends Command {
       }
     }
 
-    this.log("Got vcards #VHvQJe");
+    this.debug("Got vcards #VHvQJe");
     this.debug(vcards);
   }
 }

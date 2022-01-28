@@ -24,7 +24,7 @@ export default class Sync extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(Sync);
 
-    const files = await getFilesFromPath(flags.directory);
+    const files = await getFilesFromPath(flags.directory, ["*.contact.md"]);
 
     for (const file of files) {
       // eslint-disable-next-line no-await-in-loop
@@ -41,10 +41,10 @@ export default class Sync extends Command {
       const { result: markdown } = result;
 
       const data = parseMarkdown(markdown);
-      this.log("Got data #J4XJIy");
+      this.debug("Got data #J4XJIy");
 
       if (!isValidContact(data.data)) {
-        this.log("FAILURE #7WPXhs");
+        this.debug("FAILURE #7WPXhs");
         this.warn("Found invalid contact. #JcLLUI");
         this.debug({ file });
         continue;
@@ -53,7 +53,7 @@ export default class Sync extends Command {
       // Now we have a valid contact we can sync
     }
 
-    this.log(`Works #3JvfHi`);
-    this.log(`Found ${files.length} files.`);
+    this.debug(`Works #3JvfHi`);
+    this.debug(`Found ${files.length} files.`);
   }
 }

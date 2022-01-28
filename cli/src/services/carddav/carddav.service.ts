@@ -23,7 +23,7 @@ export const getVcards = async (
     },
   });
 
-  log("Got client #bVoqc1");
+  debug("Got client #bVoqc1");
   debug(client);
 
   const account = await client.createAccount({
@@ -33,12 +33,12 @@ export const getVcards = async (
     },
   });
 
-  log("Got account #ToupBB");
+  debug("Got account #ToupBB");
   debug(account);
 
   const addressBooks = await client.fetchAddressBooks({ account });
 
-  log("Got address books #kzx54I");
+  debug("Got address books #kzx54I");
   debug(addressBooks);
 
   const vcardsEntries = await Promise.all(
@@ -62,7 +62,7 @@ export const getVcards = async (
 
   const vcards = Object.fromEntries(vcardsEntries);
 
-  log("Got vcards #DN3ahi");
+  debug("Got vcards #DN3ahi");
   debug(vcards);
 
   return vcards;
