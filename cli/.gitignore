@@ -7,4 +7,4 @@
 /tmp
 node_modules
 oclif.manifest.json
-.md2carddav.cache.json
+.md2carddav.*
