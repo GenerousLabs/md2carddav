@@ -4,8 +4,5 @@
     "oclif-typescript",
     "plugin:prettier/recommended",
     "prettier"
-  ],
-  "rules": {
-    "camelcase": "off"
-  }
+  ]
 }
