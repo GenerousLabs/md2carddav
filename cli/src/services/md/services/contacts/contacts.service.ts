@@ -5,9 +5,9 @@ const ContactSchema = z
   .object({
     vcf_uid: z.string(),
     company: z.string().optional(),
-    full_name: z.string().optional(),
     name: z
       .object({
+        full: z.string().optional(),
         prefix: z.string().or(z.string().array()).optional(),
         first: z.string().or(z.string().array()).optional(),
         middle: z.string().or(z.string().array()).optional(),
@@ -75,11 +75,11 @@ const ContactSchema = z
   })
   .refine((obj) => {
     // Ensure that the object has at least one name
-    if (typeof obj.full_name === "string" && obj.full_name.length > 0) {
-      return true;
-    }
-
     if (typeof obj.name !== "undefined") {
+      if (typeof obj.name.full === "string" && obj.name.full.length > 0) {
+        return true;
+      }
+
       if (typeof obj.name.first === "string" && obj.name.first.length > 0) {
         return true;
       }

@@ -3,7 +3,7 @@ import { getContactFromYamlFrontmatterData } from "../../../../../src/services/m
 
 const baseContact = {
   vcf_uid: "1",
-  full_name: "JD",
+  name: { full: "JD" },
 };
 
 const expectValidHelper = (input: any) => {
@@ -85,6 +85,6 @@ describe("contacts.service", () => {
   });
 
   test.it("Accepts a record with only a full name #2TUTOi", () => {
-    expectValidHelper({ vcf_uid: "1", full_name: "Jane Doe" });
+    expectValidHelper({ vcf_uid: "1", name: { full: "Jane Doe" } });
   });
 });

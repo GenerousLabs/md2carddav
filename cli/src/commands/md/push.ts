@@ -1,6 +1,7 @@
 import { Command, Flags } from "@oclif/core";
 import { getVcards } from "../../services/carddav/carddav.service";
 import { getMdContacts } from "../../services/md/md.service";
+import { generateVcardFromContact } from "../../services/vcard/vcard.service";
 import { getContext } from "../../shared.utils";
 
 export default class MdPush extends Command {
@@ -55,6 +56,8 @@ export default class MdPush extends Command {
       );
       if (typeof existingVcard === "undefined") {
         // create the contact
+        this.log("Rendering vcard #r2aLgr");
+        this.log(generateVcardFromContact(contact.contact));
       } else {
         // update the contact
       }
