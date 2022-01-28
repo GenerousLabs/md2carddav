@@ -1,4 +1,4 @@
-import { Returns } from "../../shared.types";
+import { Returns } from "../../../../shared.types";
 
 export const isValidContact = (data: {
   [key: string]: string;

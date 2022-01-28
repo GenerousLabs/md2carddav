@@ -1,8 +1,8 @@
 import { Command, Flags } from "@oclif/core";
-import { isValidContact } from "../services/contacts/contacts.service";
-import { getFileContents } from "../services/file/file.service";
-import { getFilesFromPath } from "../services/files/files.service";
-import { parseMarkdown } from "../services/markdown/markdown.service";
+import { isValidContact } from "../services/md/services/contacts/contacts.service";
+import { getFileContents } from "../services/md/services/file/file.service";
+import { getFilesFromPath } from "../services/md/services/files/files.service";
+import { parseMarkdown } from "../services/md/services/markdown/markdown.service";
 
 export default class Sync extends Command {
   static description = "Sync from markdown to CardDAV";

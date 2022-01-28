@@ -3,16 +3,17 @@ import { createDAVClient, DAVObject } from "tsdav";
 import { getUidFromVcard } from "../../services/vcard/vcard.service";
 import { CommandContext } from "../../shared.types";
 
-const serverUrl = process.env.URL as string;
-const username = process.env.USER as string;
-const password = process.env.TOKEN as string;
-
-export const getVcards = async ({
-  log,
-  debug,
-}: CommandContext): Promise<{
+export const getVcards = async (
+  context: CommandContext
+): Promise<{
   [slug: string]: { vcard: DAVObject; uid?: string }[];
 }> => {
+  const {
+    log,
+    debug,
+    config: { url: serverUrl, username, password },
+  } = context;
+
   const client = await createDAVClient({
     serverUrl,
     authMethod: "Basic",

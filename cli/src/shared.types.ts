@@ -1,4 +1,6 @@
 import { Command } from "@oclif/core";
+import { z } from "zod";
+import { ConfigSchema } from "./shared.utils";
 
 export type ErrorResult = {
   success: false;
@@ -15,4 +17,5 @@ export type Returns<RT> = ErrorResult | SuccessResult<RT>;
 
 export type CommandContext = Pick<Command, "log" | "error"> & {
   debug(...args: any[]): void;
+  config: z.infer<typeof ConfigSchema>;
 };

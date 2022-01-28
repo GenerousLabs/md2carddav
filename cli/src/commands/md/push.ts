@@ -21,6 +21,10 @@ export default class MdPush extends Command {
 
     const context = await getContext(this);
 
+    this.debug("got context #5mjOU9");
+    this.debug(context);
+    return;
+
     const vcards = await getVcards(context);
 
     // const contacts = await getcont;
