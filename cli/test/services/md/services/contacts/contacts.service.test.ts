@@ -2,7 +2,7 @@ import { expect, test } from "@oclif/test";
 import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
 
 const baseContact = {
-  vcf_uid: "1",
+  uid: "1",
   name: { full: "JD" },
 };
 
@@ -69,22 +69,22 @@ describe("contacts.service", () => {
   });
 
   test.it("Rejects a record without a name #yOHwJm", () => {
-    expectInvalidHelper({ vcf_uid: "1", emails: ["md@domain.tld"] });
+    expectInvalidHelper({ uid: "1", emails: ["md@domain.tld"] });
   });
 
   test.it("Accepts a record with only a first name #ooTQiK", () => {
-    expectValidHelper({ vcf_uid: "1", name: { first: "Jane" } });
+    expectValidHelper({ uid: "1", name: { first: "Jane" } });
   });
 
   test.it("Accepts a record with only a last name #Q64LNK", () => {
-    expectValidHelper({ vcf_uid: "1", name: { last: "Doe" } });
+    expectValidHelper({ uid: "1", name: { last: "Doe" } });
   });
 
   test.it("Accepts a record with only a company name #4fH3w3", () => {
-    expectValidHelper({ vcf_uid: "1", company: "JD Inc" });
+    expectValidHelper({ uid: "1", company: "JD Inc" });
   });
 
   test.it("Accepts a record with only a full name #2TUTOi", () => {
-    expectValidHelper({ vcf_uid: "1", name: { full: "Jane Doe" } });
+    expectValidHelper({ uid: "1", name: { full: "Jane Doe" } });
   });
 });

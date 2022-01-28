@@ -40,7 +40,7 @@ export const generateVcardFromContact = (contact: Contact): string => {
   // eslint-disable-next-line guard-for-in
   for (const key of keys) {
     switch (key) {
-      case "vcf_uid": {
+      case "uid": {
         vcf.setUID(contact[key]);
         break;
       }

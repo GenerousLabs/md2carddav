@@ -1,7 +1,10 @@
 import { Command, Flags } from "@oclif/core";
 import { path, writeAsync } from "fs-jetpack";
 import slugify from "slugify";
-import { getVCards } from "../../services/carddav/carddav.service";
+import {
+  getClientAndAccount,
+  getVCards,
+} from "../../services/carddav/carddav.service";
 import { getContext } from "../../shared.utils";
 export default class CarddavFetch extends Command {
   static description = "describe the command here";
@@ -25,7 +28,9 @@ export default class CarddavFetch extends Command {
 
     const context = await getContext(this);
 
-    const { addressBooks } = await getVCards(context);
+    const clientAndAccount = await getClientAndAccount(context);
+
+    const addressBooks = await getVCards(context, clientAndAccount);
 
     // eslint-disable-next-line guard-for-in
     for (const addressBook of addressBooks) {

@@ -3,7 +3,7 @@ import { z } from "zod";
 
 const ContactSchema = z
   .object({
-    vcf_uid: z.string(),
+    uid: z.string(),
     company: z.string().optional(),
     name: z
       .object({

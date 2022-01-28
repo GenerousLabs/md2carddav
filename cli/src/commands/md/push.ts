@@ -1,5 +1,8 @@
-import { Command, Flags } from "@oclif/core";
-import { getVCards } from "../../services/carddav/carddav.service";
+import { Command } from "@oclif/core";
+import {
+  getClientAndAccount,
+  getVCards,
+} from "../../services/carddav/carddav.service";
 import { getMdContacts } from "../../services/md/md.service";
 import { generateVcardFromContact } from "../../services/vcard/vcard.service";
 import { getContext } from "../../shared.utils";
@@ -37,8 +40,12 @@ export default class MdPush extends Command {
     this.debug("got context #5mjOU9");
     this.debug(context);
 
-    const { account, addressBooks } = await getVCards(context);
-    this.debug("Got vcards #Oh7EXz", account, addressBooks);
+    const clientAndAccount = await getClientAndAccount(context);
+
+    const addressBooks = await getVCards(context, clientAndAccount);
+    for (const addressBook of addressBooks) {
+      this.debug("Got vcards #Oh7EXz", addressBook, addressBook.vcards);
+    }
 
     const addressBook = addressBooks.find(
       ({ displayName }) => displayName === syncAddressBookDisplayName
@@ -55,16 +62,40 @@ export default class MdPush extends Command {
     const contacts = await getMdContacts(context);
     this.debug("Got contacts #iI2F1l", contacts);
 
+    const { client } = clientAndAccount;
+
     for (const contact of contacts) {
-      const existingVcard = vcards.find(
-        (vcard) => vcard.uid === contact.contact.vcf_uid
-      );
+      const {
+        contact: { uid },
+      } = contact;
+      const existingVcard = vcards.find((vcard) => vcard.uid === uid);
       if (typeof existingVcard === "undefined") {
-        // create the contact
-        this.log("Rendering vcard #r2aLgr");
-        this.log(generateVcardFromContact(contact.contact));
+        const vcard = generateVcardFromContact(contact.contact);
+        // eslint-disable-next-line no-await-in-loop
+        const result = await client.createVCard({
+          addressBook,
+          filename: `${uid}.vcf`,
+          vCardString: vcard,
+        });
+
+        if (!result.ok) {
+          this.debug("Failed to push vcf #bifKkH", result);
+          this.error("Failed to push vcf #E5ysfm");
+        }
       } else {
-        // update the contact
+        // eslint-disable-next-line no-await-in-loop
+        const result = await client.updateVCard({
+          vCard: {
+            url: existingVcard.vcard.url,
+            etag: existingVcard.vcard.etag,
+            data: existingVcard,
+          },
+        });
+
+        if (!result.ok) {
+          this.debug("Failed to update vcf #4Xb28G", result);
+          this.error("Failed to update vcf #6TqyU3");
+        }
       }
     }
   }

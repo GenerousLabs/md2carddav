@@ -1,15 +1,22 @@
-import { createDAVClient, DAVAccount, DAVCollection, DAVObject } from "tsdav";
+import {
+  createDAVClient,
+  createVCard,
+  DAVAccount,
+  DAVAddressBook,
+  DAVCollection,
+  DAVObject,
+} from "tsdav";
 import { getUidFromVcard } from "../../services/vcard/vcard.service";
 import { CommandContext } from "../../shared.types";
 
-export const getVCards = async (
-  context: CommandContext
-): Promise<{
+type ClientAndAccount = {
+  client: Awaited<ReturnType<typeof createDAVClient>>;
   account: DAVAccount;
-  addressBooks: (DAVCollection & {
-    vcards: { vcard: DAVObject; uid?: string }[];
-  })[];
-}> => {
+};
+
+export const getClientAndAccount = async (
+  context: CommandContext
+): Promise<ClientAndAccount> => {
   const {
     debug,
     config: {
@@ -26,9 +33,6 @@ export const getVCards = async (
     },
   });
 
-  debug("Got client #bVoqc1");
-  debug(client);
-
   const account = await client.createAccount({
     account: {
       serverUrl,
@@ -36,8 +40,20 @@ export const getVCards = async (
     },
   });
 
-  debug("Got account #ToupBB");
-  debug(account);
+  debug("Got client and account #ToupBB", client, account);
+
+  return { client, account };
+};
+
+export const getVCards = async (
+  context: CommandContext,
+  { client, account }: ClientAndAccount
+): Promise<
+  (DAVCollection & {
+    vcards: { vcard: DAVObject; uid?: string }[];
+  })[]
+> => {
+  const { debug } = context;
 
   const addressBooks = await client.fetchAddressBooks({ account });
 
@@ -56,15 +72,11 @@ export const getVCards = async (
           uid: uidResult.success ? uidResult.result : undefined,
         };
       });
-      return { ...addressBook, vcards: expandedVcards };
+      return { ...addressBook, vcards: expandedVcards } as const;
     })
   );
 
-  debug("Got vcards #DN3ahi");
-  debug(addressBooksWithVcards);
+  debug("Got vcards #DN3ahi", addressBooksWithVcards);
 
-  return {
-    account,
-    addressBooks: addressBooksWithVcards,
-  };
+  return addressBooksWithVcards;
 };
