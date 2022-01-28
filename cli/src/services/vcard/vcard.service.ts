@@ -168,6 +168,12 @@ export const generateVcardFromContact = (contact: Contact): string => {
         break;
       }
 
+      case "desc": {
+        const { desc } = contact as Required<Contact>;
+        vcf.addNotes(desc);
+        break;
+      }
+
       default: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const _neverCheck: never = key;

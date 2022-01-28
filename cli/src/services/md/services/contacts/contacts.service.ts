@@ -72,6 +72,7 @@ const ContactSchema = z
         )
       )
       .optional(),
+    desc: z.string().optional(),
   })
   .refine((obj) => {
     // Ensure that the object has at least one name

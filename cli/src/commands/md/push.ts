@@ -68,9 +68,13 @@ export default class MdPush extends Command {
       const {
         contact: { uid },
       } = contact;
+      const vcard = generateVcardFromContact(contact.contact);
+
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
+
       if (typeof existingVcard === "undefined") {
-        const vcard = generateVcardFromContact(contact.contact);
+        this.debug("Did not find existing vcard to update #HriKMD");
+
         // eslint-disable-next-line no-await-in-loop
         const result = await client.createVCard({
           addressBook,
@@ -83,12 +87,14 @@ export default class MdPush extends Command {
           this.error("Failed to push vcf #E5ysfm");
         }
       } else {
+        this.debug("Found existing vcard to update #svKzvh");
+
         // eslint-disable-next-line no-await-in-loop
         const result = await client.updateVCard({
           vCard: {
             url: existingVcard.vcard.url,
             etag: existingVcard.vcard.etag,
-            data: existingVcard,
+            data: vcard,
           },
         });
 
@@ -96,6 +102,8 @@ export default class MdPush extends Command {
           this.debug("Failed to update vcf #4Xb28G", result);
           this.error("Failed to update vcf #6TqyU3");
         }
+
+        this.debug("Successfully updated vcard #V6VG0x", vcard, result);
       }
     }
   }
