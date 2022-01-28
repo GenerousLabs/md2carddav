@@ -2,6 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import {
   createAccount,
   createDAVClient,
+  DAVAccount,
   DAVNamespaceShort,
   fetchAddressBooks,
   syncCollection,
@@ -89,27 +90,11 @@ export default class CarddavFetch extends Command {
     const [addressBook] = addressBooks;
     this.debug(addressBook);
 
-    // const vcards = await client.fetchVCards({
-    //   addressBook,
-    // });
-
-    // this.log("Got vcards #VHvQJe");
-    // this.debug(vcards);
-    // return;
-
-    const firstRound = await client.syncCollection({
-      url: addressBook.url,
-      props: {
-        [`${DAVNamespaceShort.DAV}:getetag`]: {},
-        [`${DAVNamespaceShort.CARDDAV}:FN`]: {},
-      },
-      syncLevel: 1,
+    const vcards = await client.fetchVCards({
+      addressBook,
     });
-    this.log("Got first step of sync #STdk7t");
-    for (const row of firstRound) {
-      this.debug(row.raw, row.props, row.href, row.status);
-    }
 
-    this.log("Running #qcKLqf", args, flags);
+    this.log("Got vcards #VHvQJe");
+    this.debug(vcards);
   }
 }
