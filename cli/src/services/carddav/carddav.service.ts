@@ -1,4 +1,3 @@
-import slugify from "slugify";
 import { createDAVClient, DAVObject } from "tsdav";
 import { getUidFromVcard } from "../../services/vcard/vcard.service";
 import { CommandContext } from "../../shared.types";
