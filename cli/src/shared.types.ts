@@ -1,6 +1,6 @@
 import { Command } from "@oclif/core";
 import { z } from "zod";
-import { ConfigSchema } from "./shared.utils";
+import { ConfigSchema } from "./shared.config";
 
 export type ErrorResult = {
   success: false;

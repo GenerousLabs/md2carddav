@@ -1,16 +1,8 @@
 /* eslint-disable prefer-spread */
 import { Command } from "@oclif/core";
-import { CommandContext } from "./shared.types";
 import { cosmiconfig } from "cosmiconfig";
-import { z } from "zod";
-
-export const ConfigSchema = z
-  .object({
-    url: z.string().url(),
-    username: z.string().optional(),
-    password: z.string().optional(),
-  })
-  .strict();
+import { ConfigSchema } from "./shared.config";
+import { CommandContext } from "./shared.types";
 
 const transformConfigToNullIfInvalid = (
   config: Awaited<ReturnType<Awaited<ReturnType<typeof cosmiconfig>>["search"]>>
