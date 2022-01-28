@@ -10,6 +10,17 @@ describe("vcard.service", () => {
     );
   });
 
+  test.it("Correctly encodes a full, first, and last name #BYGiqJ", () => {
+    expect(
+      generateVcardFromContact({
+        uid: "1",
+        name: { full: "Jane Doe", first: "Janis", last: "Donis" },
+      })
+    ).to.equal(
+      `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nN:Donis;Janis;;;\r\nUID:1\r\nEND:VCARD`
+    );
+  });
+
   test.it(
     "Correctly encodes an array of phone numbers with types #O54AMf",
     () => {
