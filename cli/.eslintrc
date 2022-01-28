@@ -2,7 +2,10 @@
   "extends": [
     "oclif",
     "oclif-typescript",
-    "prettier",
-    "plugin:prettier/recommended"
-  ]
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "camelcase": "off"
+  }
 }

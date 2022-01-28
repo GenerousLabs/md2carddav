@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { expect, test } from "@oclif/test";
 import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
 

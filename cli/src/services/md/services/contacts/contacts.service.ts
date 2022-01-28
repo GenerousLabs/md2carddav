@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Returns } from "../../../../shared.types";
 import { z } from "zod";
 
