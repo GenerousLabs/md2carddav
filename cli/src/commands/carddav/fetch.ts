@@ -1,5 +1,11 @@
 import { Command, Flags } from "@oclif/core";
-import { createAccount, createDAVClient, fetchAddressBooks } from "tsdav";
+import {
+  createAccount,
+  createDAVClient,
+  DAVNamespaceShort,
+  fetchAddressBooks,
+  syncCollection,
+} from "tsdav";
 import { getCache, setCache } from "../../services/cache/cache.service";
 
 const serverUrl = process.env.URL as string;
@@ -80,13 +86,29 @@ export default class CarddavFetch extends Command {
     const { args, flags } = await this.parse(CarddavFetch);
 
     const { client, account, addressBooks } = await this.setup();
+    const [addressBook] = addressBooks;
+    this.debug(addressBook);
 
-    const vcards = await client.fetchVCards({
-      addressBook: addressBooks[0],
+    // const vcards = await client.fetchVCards({
+    //   addressBook,
+    // });
+
+    // this.log("Got vcards #VHvQJe");
+    // this.debug(vcards);
+    // return;
+
+    const firstRound = await client.syncCollection({
+      url: addressBook.url,
+      props: {
+        [`${DAVNamespaceShort.DAV}:getetag`]: {},
+        [`${DAVNamespaceShort.CARDDAV}:FN`]: {},
+      },
+      syncLevel: 1,
     });
-
-    this.log("Got vcards #VHvQJe");
-    this.debug(vcards);
+    this.log("Got first step of sync #STdk7t");
+    for (const row of firstRound) {
+      this.debug(row.raw, row.props, row.href, row.status);
+    }
 
     this.log("Running #qcKLqf", args, flags);
   }
