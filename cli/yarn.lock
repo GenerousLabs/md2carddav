@@ -217,6 +217,14 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
+"@covve/easy-vcard@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@covve/easy-vcard/-/easy-vcard-1.0.0.tgz#697e32a9ca2fc82b4a7ee9ed6c8d8c68727dbdd2"
+  integrity sha512-rFDqJ55lpCT7oeiIa4PwAcWcaPgW6RhZaWWLpQUV6jbG8hkJkPRET0jIUv8UGXlltueUtXNfOyRUM3aEID+3bg==
+  dependencies:
+    lodash.clonedeep "4.5.0"
+    lodash.isempty "4.4.0"
+
 "@cspotcode/source-map-consumer@0.8.0":
   version "0.8.0"
   resolved "https://registry.npmjs.org/@cspotcode/source-map-consumer/-/source-map-consumer-0.8.0.tgz"
@@ -3765,6 +3773,16 @@ locate-path@^6.0.0:
   integrity sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==
   dependencies:
     p-locate "^5.0.0"
+
+lodash.clonedeep@4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
+lodash.isempty@4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/lodash.isempty/-/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
+  integrity sha1-b4bL7di+TsmHvpqvM8loTbGzHn4=
 
 lodash.merge@^4.6.2:
   version "4.6.2"
