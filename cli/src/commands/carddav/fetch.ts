@@ -1,13 +1,8 @@
 import { Command, Flags } from "@oclif/core";
-import {
-  createAccount,
-  createDAVClient,
-  DAVAccount,
-  DAVNamespaceShort,
-  fetchAddressBooks,
-  syncCollection,
-} from "tsdav";
-import { getCache, setCache } from "../../services/cache/cache.service";
+import { path, writeAsync } from "fs-jetpack";
+import slugify from "slugify";
+import { createDAVClient } from "tsdav";
+import { getUidFromVcard } from "../../services/vcard/vcard.service";
 
 const serverUrl = process.env.URL as string;
 const username = process.env.USER as string;
@@ -19,21 +14,16 @@ export default class CarddavFetch extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
-    url: Flags.string({
-      char: "u",
-      description: "CardDAV URL",
-      // required: true,
+    directory: Flags.string({
+      char: "d",
+      description: "path to save VCF files",
+      required: true,
     }),
   };
 
   static args = [];
 
-  private async setup() {
-    const cache = getCache();
-
-    this.log("Got cache #xwONmh");
-    this.debug(cache);
-
+  private async getVcards() {
     const client = await createDAVClient({
       serverUrl,
       authMethod: "Basic",
@@ -46,22 +36,6 @@ export default class CarddavFetch extends Command {
     this.log("Got client #bVoqc1");
     this.debug(client);
 
-    if (
-      typeof cache.account !== "undefined" &&
-      typeof cache.addressBooks !== "undefined"
-    ) {
-      this.log("Got cached account and addressBooks #AGOahk");
-      return {
-        client,
-        account: cache.account as Awaited<ReturnType<typeof createAccount>>,
-        addressBooks: cache.addressBooks as Awaited<
-          ReturnType<typeof fetchAddressBooks>
-        >,
-      };
-    }
-
-    // NOTE: This can take >40s to complete against a monica instance with ~4k
-    // contacts, need to figure out how to cache the result.
     const account = await client.createAccount({
       account: {
         serverUrl,
@@ -77,22 +51,61 @@ export default class CarddavFetch extends Command {
     this.log("Got address books #kzx54I");
     this.debug(addressBooks);
 
-    setCache("account", account);
-    setCache("addressBooks", addressBooks);
+    const vcardsEntries = await Promise.all(
+      addressBooks.map(async (addressBook, index) => {
+        const slug = slugify(addressBook.displayName || index.toString(), {
+          lower: true,
+        });
+        const vcards = await client.fetchVCards({
+          addressBook,
+        });
+        const expandedVcards = vcards.map((vcard) => {
+          const uidResult = getUidFromVcard(vcard.data);
+          return {
+            vcard,
+            uid: uidResult.success ? uidResult.result : undefined,
+          };
+        });
+        return [slug, expandedVcards] as const;
+      })
+    );
 
-    return { client, account, addressBooks };
+    const vcards = Object.fromEntries(vcardsEntries);
+
+    this.log("Got vcards #DN3ahi");
+    this.debug(vcards);
+
+    return vcards;
   }
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(CarddavFetch);
+    const {
+      flags: { directory },
+    } = await this.parse(CarddavFetch);
 
-    const { client, account, addressBooks } = await this.setup();
-    const [addressBook] = addressBooks;
-    this.debug(addressBook);
+    const vcards = await this.getVcards();
 
-    const vcards = await client.fetchVCards({
-      addressBook,
-    });
+    // eslint-disable-next-line guard-for-in
+    for (const slug in vcards) {
+      const expandedVcards = vcards[slug];
+      for (const card of expandedVcards) {
+        if (typeof card.vcard.data !== "string") {
+          this.warn("Found vcard without data. #tTKwcI");
+          this.debug(card);
+          continue;
+        }
+
+        if (typeof card.uid === "undefined") {
+          this.warn("Found vcard without uid. #0W953Y");
+          this.debug(card);
+          continue;
+        }
+
+        const writePath = path(directory, slug, `${card.uid}.vcf`);
+        // eslint-disable-next-line no-await-in-loop
+        await writeAsync(writePath, card.vcard.data);
+      }
+    }
 
     this.log("Got vcards #VHvQJe");
     this.debug(vcards);

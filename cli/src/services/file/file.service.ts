@@ -1,4 +1,4 @@
-import jetpack = require("fs-jetpack");
+import * as jetpack from "fs-jetpack";
 import { Returns } from "../../shared.types";
 
 export const getFileContents = async (
