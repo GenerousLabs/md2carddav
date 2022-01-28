@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { isValidContact } from "../services/md/services/contacts/contacts.service";
+import { getContactFromYamlFrontmatterData } from "../services/md/services/contacts/contacts.service";
 import { getFileContents } from "../services/md/services/file/file.service";
 import { getFilesFromPath } from "../services/md/services/files/files.service";
 import { parseMarkdown } from "../services/md/services/markdown/markdown.service";
@@ -43,7 +43,9 @@ export default class Sync extends Command {
       const data = parseMarkdown(markdown);
       this.debug("Got data #J4XJIy");
 
-      if (!isValidContact(data.data)) {
+      const contactResult = getContactFromYamlFrontmatterData(data.data);
+
+      if (!contactResult.success) {
         this.debug("FAILURE #7WPXhs");
         this.warn("Found invalid contact. #JcLLUI");
         this.debug({ file });

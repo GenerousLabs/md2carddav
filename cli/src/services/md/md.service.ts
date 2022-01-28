@@ -1,10 +1,21 @@
+import { EntryInfo } from "readdirp";
 import { CommandContext } from "../../shared.types";
-import { isValidContact } from "./services/contacts/contacts.service";
+import {
+  Contact,
+  getContactFromYamlFrontmatterData,
+} from "./services/contacts/contacts.service";
 import { getFileContents } from "./services/file/file.service";
 import { getFilesFromPath } from "./services/files/files.service";
 import { parseMarkdown } from "./services/markdown/markdown.service";
 
-export const getMdContacts = async (context: CommandContext) => {
+export const getMdContacts = async (
+  context: CommandContext
+): Promise<
+  {
+    file: EntryInfo;
+    contact: Contact;
+  }[]
+> => {
   const {
     debug,
     config: {
@@ -24,17 +35,18 @@ export const getMdContacts = async (context: CommandContext) => {
       }
 
       const matter = parseMarkdown(markdownResult.result);
-      if (!isValidContact(matter.data)) {
+      const contactResult = getContactFromYamlFrontmatterData(matter.data);
+      if (!contactResult.success) {
         return { file };
       }
 
-      return { file, matter };
+      return { file, contact: contactResult.result };
     })
   );
 
   const validFiles = filesContents.filter(
-    (file) => typeof file.matter !== "undefined"
-  );
+    (file) => typeof file.contact !== "undefined"
+  ) as { file: EntryInfo; contact: Contact }[];
 
   return validFiles;
 };

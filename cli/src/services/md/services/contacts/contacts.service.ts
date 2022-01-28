@@ -96,14 +96,15 @@ const ContactSchema = z
 
     return false;
   });
+export type Contact = z.infer<typeof ContactSchema>;
 
-export const isValidContact = (data: {
+export const getContactFromYamlFrontmatterData = (data: {
   [key: string]: any;
-}): Returns<boolean> => {
+}): Returns<Contact> => {
   const parseResult = ContactSchema.safeParse(data);
 
   if (parseResult.success) {
-    return { success: true, result: true };
+    return { success: true, result: parseResult.data };
   }
 
   return {

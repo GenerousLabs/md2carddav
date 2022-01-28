@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { expect, test } from "@oclif/test";
-import { isValidContact } from "../../../../../src/services/md/services/contacts/contacts.service";
+import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
 
 const baseContact = {
   vcf_uid: "1",
@@ -8,14 +8,14 @@ const baseContact = {
 };
 
 const expectValidHelper = (input: any) => {
-  expect(isValidContact(input)).eql({
-    success: true,
-    result: true,
-  });
+  const result = getContactFromYamlFrontmatterData(input);
+  expect(result).to.have.keys("success", "result");
+  expect(result).to.have.property("success", true);
+  expect((result as any).result).to.be.a("object");
 };
 
 const expectInvalidHelper = (input: any) => {
-  const result = isValidContact(input);
+  const result = getContactFromYamlFrontmatterData(input);
   expect(result).to.have.keys(["success", "code", "error"]);
   expect(result).to.have.property("success", false);
   expect((result as any).code).to.be.a("string");

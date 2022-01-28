@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { path, writeAsync } from "fs-jetpack";
+import slugify from "slugify";
 import { getVcards } from "../../services/carddav/carddav.service";
 import { getContext } from "../../shared.utils";
 export default class CarddavFetch extends Command {
@@ -27,7 +28,8 @@ export default class CarddavFetch extends Command {
     const vcards = await getVcards(context);
 
     // eslint-disable-next-line guard-for-in
-    for (const slug in vcards) {
+    for (const key in vcards) {
+      const slug = slugify(key);
       const expandedVcards = vcards[slug];
       for (const card of expandedVcards) {
         if (typeof card.vcard.data !== "string") {

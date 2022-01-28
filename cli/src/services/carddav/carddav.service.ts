@@ -9,9 +9,10 @@ export const getVcards = async (
   [slug: string]: { vcard: DAVObject; uid?: string }[];
 }> => {
   const {
-    log,
     debug,
-    config: { url: serverUrl, username, password },
+    config: {
+      carddav: { url: serverUrl, username, password },
+    },
   } = context;
 
   const client = await createDAVClient({
@@ -43,9 +44,7 @@ export const getVcards = async (
 
   const vcardsEntries = await Promise.all(
     addressBooks.map(async (addressBook, index) => {
-      const slug = slugify(addressBook.displayName || index.toString(), {
-        lower: true,
-      });
+      const key = addressBook.displayName || index.toString();
       const vcards = await client.fetchVCards({
         addressBook,
       });
@@ -56,7 +55,7 @@ export const getVcards = async (
           uid: uidResult.success ? uidResult.result : undefined,
         };
       });
-      return [slug, expandedVcards] as const;
+      return [key, expandedVcards] as const;
     })
   );
 
