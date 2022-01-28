@@ -6,15 +6,20 @@ import * as readdirp from "readdirp";
  */
 
 export const getFilesFromPath = async (
-  path: string
+  path: string,
+  fileFilter: string[]
 ): Promise<readdirp.EntryInfo[]> => {
   const stats = await fs.inspectAsync(path);
 
-  if (typeof stats === "undefined" || stats.type !== "dir") {
-    throw new Error("Invalid path. #2YADVn");
+  if (typeof stats === "undefined") {
+    throw new Error(`Path does not exist. #Fb3Don ${path}`);
   }
 
-  const files = await readdirp.promise(path, { fileFilter: "*.contact.md" });
+  if (stats.type !== "dir") {
+    throw new Error("Path is not a directory. #2YADVn");
+  }
+
+  const files = await readdirp.promise(path, { fileFilter });
 
   return files;
 };
