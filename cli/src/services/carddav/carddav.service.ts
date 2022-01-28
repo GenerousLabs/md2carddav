@@ -2,7 +2,7 @@ import { createDAVClient, DAVObject } from "tsdav";
 import { getUidFromVcard } from "../../services/vcard/vcard.service";
 import { CommandContext } from "../../shared.types";
 
-export const getVcards = async (
+export const getVCards = async (
   context: CommandContext
 ): Promise<{
   [slug: string]: { vcard: DAVObject; uid?: string }[];

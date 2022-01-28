@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { getVcards } from "../../services/carddav/carddav.service";
+import { getVCards } from "../../services/carddav/carddav.service";
 import { getMdContacts } from "../../services/md/md.service";
 import { generateVcardFromContact } from "../../services/vcard/vcard.service";
 import { getContext } from "../../shared.utils";
@@ -37,7 +37,7 @@ export default class MdPush extends Command {
     this.debug("got context #5mjOU9");
     this.debug(context);
 
-    const vcards = await getVcards(context);
+    const vcards = await getVCards(context);
     this.debug("Got vcards #Oh7EXz", vcards);
 
     const addressBook = vcards[syncAddressBookDisplayName];
