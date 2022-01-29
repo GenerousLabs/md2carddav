@@ -59,8 +59,11 @@
     ],
     "topicSeparator": " ",
     "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
+      "carddav": {
+        "description": "Commands related to CardDAV server contacts"
+      },
+      "md": {
+        "description": "Commands related to local markdown contacts"
       }
     }
   },

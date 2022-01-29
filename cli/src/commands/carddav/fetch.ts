@@ -7,9 +7,23 @@ import {
 } from "../../services/carddav/carddav.service";
 import { getContext } from "../../shared.utils";
 export default class CarddavFetch extends Command {
-  static description = "describe the command here";
+  static description = `fetch vcf files from carddav server into a local directory
 
-  static examples = ["<%= config.bin %> <%= command.id %>"];
+fetch does the following:
+
+1 - Connects to your configured CardDAV server
+2 - Retrieves a list of address books on that server
+3 - Fetches every VCard in every address book
+4 - Saves them all into your target directory
+- In a folder with the address book display name (slugified)
+- In a file named UID.vcf where UID is the UID of the VCard
+For example addressbook/5182b11b-7ff4-511d-8d92-d45369ec1fac.vcf
+NOTE: This command does not remove any existing files, it is recommended to start with an empty directory.`;
+
+  static examples = [
+    "<%= config.bin %> <%= command.id %>",
+    `fetch -d /path/to/put/vcf/files/`,
+  ];
 
   static flags = {
     directory: Flags.string({

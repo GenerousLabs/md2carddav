@@ -8,7 +8,11 @@ import { generateVcardFromContact } from "../../services/vcard/vcard.service";
 import { getContext } from "../../shared.utils";
 
 export default class MdPush extends Command {
-  static description = "describe the command here";
+  static description =
+    `Push contacts from markdown to CardDAV\n` +
+    `Load all contacts from markdown, load all contacts from CardDAV, find ` +
+    `any which need created or update, and then create or update them on ` +
+    `configured the CardDAV server`;
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
