@@ -24,6 +24,7 @@
     "cosmiconfig": "^7.0.1",
     "fs-jetpack": "^4.3.1",
     "gray-matter": "^4.0.3",
+    "obj-clean": "^3.0.1",
     "readdirp": "^3.6.0",
     "slugify": "^1.6.5",
     "tsdav": "^2.0.0-rc.2",
