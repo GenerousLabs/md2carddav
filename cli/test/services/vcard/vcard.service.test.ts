@@ -1,4 +1,7 @@
-import { generateVcardFromContact } from "../../../src/services/vcard/vcard.service";
+import {
+  generateVcardFromContact,
+  _getFilenames,
+} from "../../../src/services/vcard/vcard.service";
 import { expect, test } from "@oclif/test";
 
 describe("vcard.service", () => {
@@ -56,5 +59,61 @@ describe("vcard.service", () => {
     );
 
     test.it("Correctly encodes a photo #lz7uNX");
+  });
+
+  describe("_getFilenames()", () => {
+    test.it("Ignores empty names #CpofbI", () => {
+      expect(
+        _getFilenames({
+          uid: "1",
+          name: { full: "", first: " ", middle: " ", last: "   " },
+        })
+      ).to.eql(["1"]);
+    });
+
+    test.it("Ignores undefined names #w3xluR", () => {
+      expect(
+        _getFilenames({
+          uid: "1",
+          name: {
+            full: undefined,
+            first: undefined,
+            middle: undefined,
+            last: undefined,
+          },
+        })
+      ).to.eql(["1"]);
+    });
+
+    test.it("Correctly joins and lowercases full name #5vpfra", () => {
+      expect(_getFilenames({ uid: "1", name: { full: "Jane Doe" } })).to.eql([
+        "jane-doe",
+        "1",
+      ]);
+    });
+
+    test.it("Returns the uid when there is no name #5vpfra", () => {
+      expect(_getFilenames({ uid: "1" })).to.eql(["1"]);
+    });
+
+    test.it("Returns a company name if that's all there is #ER3qmD", () => {
+      expect(_getFilenames({ uid: "1", company: "JD Inc" })).to.eql([
+        "jd-inc",
+        "1",
+      ]);
+    });
+
+    test.it(
+      "Does not return a company name if a full name exists #8w8ji8",
+      () => {
+        expect(
+          _getFilenames({
+            uid: "1",
+            name: { full: "Jane Doe" },
+            company: "JD Inc",
+          })
+        ).to.eql(["jane-doe", "1"]);
+      }
+    );
   });
 });

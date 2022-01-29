@@ -1,10 +1,8 @@
 import { Command, Flags } from "@oclif/core";
 import { exists, readAsync, writeAsync } from "fs-jetpack";
-import { writeFile } from "fs/promises";
 import * as matter from "gray-matter";
 import { join, resolve } from "path";
 import * as readdirp from "readdirp";
-import slugify from "slugify";
 import { generateContactFromVcard } from "../../services/vcard/vcard.service";
 import { CONTACT_EXTENSION } from "../../shared.constants";
 import { Contact } from "../../shared.types";
@@ -43,9 +41,14 @@ export default class MdImport extends Command {
       fileFilter: "*.vcf",
     });
 
+    const errors = [];
+
     for (const file of files) {
       try {
-        this.log("Starting file #pwhTgo", file.fullPath);
+        if (verbose) {
+          this.log("Starting file #pwhTgo", file.fullPath);
+        }
+
         // eslint-disable-next-line no-await-in-loop
         const vcfString = await readAsync(file.fullPath);
 
@@ -98,10 +101,12 @@ export default class MdImport extends Command {
         // eslint-disable-next-line no-await-in-loop
         await writeAsync(mdPath, md);
       } catch (error) {
+        errors.push({ path: file.fullPath, error });
         this.warn(`Error creating contact. #mw1ryp ${file.fullPath} ${error}`);
       }
     }
 
     this.log(`Imported ${files.length} files #CrbByr`);
+    this.log(`Encountered ${errors.length} errors. #FnNy2f`, errors);
   }
 }

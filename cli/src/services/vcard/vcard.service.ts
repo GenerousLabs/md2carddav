@@ -365,23 +365,31 @@ const dataFromVcard = (
 };
 
 export const _getFilenames = (data: Contact): string[] => {
-  const { name, uid } = data;
+  const { name, uid, company } = data;
 
   if (typeof name === "undefined") {
+    if (typeof company === "string" && company.trim().length > 0) {
+      return [slugify(company, { lower: true }), uid];
+    }
+
     return [uid];
   }
 
   const { full, first, middle, last } = name;
 
-  if (typeof full === "string") {
+  if (typeof full === "string" && full.trim().length > 0) {
     return [slugify(full, { lower: true }), uid];
   }
 
   const fullName = [first, last, middle]
-    .filter((a) => typeof a === "string")
+    .filter((a) => typeof a === "string" && a.trim().length > 0)
     .join(" ");
 
-  return [slugify(fullName, { lower: true }), uid];
+  if (fullName.length > 0) {
+    return [slugify(fullName, { lower: true }), uid];
+  }
+
+  return [uid];
 };
 
 const getNote = (vcard: Vcfer) => {
