@@ -4,5 +4,8 @@
     "oclif-typescript",
     "plugin:prettier/recommended",
     "prettier"
-  ]
+  ],
+  "rules": {
+    "unicorn/prefer-node-protocol": false
+  }
 }
