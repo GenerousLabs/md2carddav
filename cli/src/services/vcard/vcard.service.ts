@@ -2,6 +2,7 @@
 import { VCard } from "@covve/easy-vcard";
 import { ContactFields, Returns } from "../../shared.types";
 import { Contact } from "../md/services/contacts/contacts.service";
+import { getPhotoAsDataURL } from "./services/photos/photos.service";
 
 export const getUidFromVcard = (input: string): Returns<string> => {
   if (typeof input !== "string") {
@@ -90,7 +91,9 @@ export const generateVcardFromContact = async (
       }
 
       case "photo": {
-        throw new Error("Photos not yet implemented.");
+        const { photo } = contact as Required<Contact>;
+        const photoDataURI = await getPhotoAsDataURL(photo);
+        vcf.addPhoto(photoDataURI);
         break;
       }
 
