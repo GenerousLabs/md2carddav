@@ -16,15 +16,6 @@ export default class MdPush extends Command {
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
-  static flags = {
-    // // flag with a value (-n, --name=VALUE)
-    // name: Flags.string({ char: "n", description: "name to print" }),
-    // // flag with no value (-f, --force)
-    // force: Flags.boolean({ char: "f" }),
-  };
-
-  static args = [{ name: "file" }];
-
   public async run(): Promise<void> {
     // const { args, flags } = await this.parse(MdPush);
 
@@ -92,14 +83,14 @@ export default class MdPush extends Command {
           this.error("Failed to push vcf #E5ysfm");
         }
 
-        return;
+        continue;
       }
 
       this.debug("Found existing vcard to update #svKzvh", uid);
 
       if (vcard === existingVcard.vcard.data) {
         this.debug("No changes in vcard, skipping update #B07yJK", uid);
-        return;
+        continue;
       }
 
       // eslint-disable-next-line no-await-in-loop
