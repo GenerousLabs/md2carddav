@@ -1,9 +1,16 @@
 /* eslint-disable unicorn/no-array-for-each */
 import { VCard } from "@covve/easy-vcard";
 import * as clean from "obj-clean";
+import slugify from "slugify";
 import Vcfer from "vcfer";
 import { ContactSchema, ContactSchemaBase } from "../../shared.schemas";
-import { Contact, ContactField, Returns } from "../../shared.types";
+import {
+  CommandContext,
+  Contact,
+  ContactField,
+  Returns,
+} from "../../shared.types";
+import { extendDebugIfPossible } from "../../shared.utils";
 import {
   getPhotoAsDataURL,
   getPhotoFromVcfer,
@@ -213,21 +220,13 @@ const getType = (type?: string | string[]) => {
   }
 };
 
-const getNote = (vcard: Vcfer) => {
-  const notes = vcard.getOne("note")?.getValue();
-
-  if (typeof notes === "undefined") {
-    return;
-  }
-
-  const replaced = notes.replace(/\\n/g, `\n`);
-  return replaced;
-};
-
 const dataFromVcard = (
+  context: CommandContext,
   vcard: Vcfer,
   uid: string
 ): Omit<Contact, "photo" | "desc"> => {
+  const debug = extendDebugIfPossible(context.debug, "dataFromVcard");
+
   const keys = Object.keys(ContactSchemaBase.shape) as ContactField[];
 
   // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce
@@ -361,16 +360,49 @@ const dataFromVcard = (
     return result.data;
   }
 
-  console.log("Failed to create contact #zLK86E", data, cleaned, result);
+  debug("Failed to create contact #zLK86E", data, cleaned, result);
   throw new Error("Failed to build vcard #VASeQn");
 };
 
+export const _getFilenames = (data: Contact): string[] => {
+  const { name, uid } = data;
+
+  if (typeof name === "undefined") {
+    return [uid];
+  }
+
+  const { full, first, middle, last } = name;
+
+  if (typeof full === "string") {
+    return [slugify(full, { lower: true }), uid];
+  }
+
+  const fullName = [first, last, middle]
+    .filter((a) => typeof a === "string")
+    .join(" ");
+
+  return [slugify(fullName, { lower: true }), uid];
+};
+
+const getNote = (vcard: Vcfer) => {
+  const notes = vcard.getOne("note")?.getValue();
+
+  if (typeof notes === "undefined") {
+    return;
+  }
+
+  const replaced = notes.replace(/\\n/g, `\n`);
+  return replaced;
+};
+
 export const generateContactFromVcard = (
+  context: CommandContext,
   vcf: string
 ): Returns<{
   data: Omit<Contact, "photo" | "notes">;
   notes?: string;
   photo?: Photo;
+  filenames: string[];
 }> => {
   const vcard = new Vcfer(vcf);
 
@@ -384,13 +416,16 @@ export const generateContactFromVcard = (
     };
   }
 
-  const photo = getPhotoFromVcfer(vcard, uid);
+  const data = dataFromVcard(context, vcard, uid);
+
+  const filenames = _getFilenames(data);
+
+  const photo = getPhotoFromVcfer(vcard);
 
   const notes = getNote(vcard);
 
   try {
-    const data = dataFromVcard(vcard, uid);
-    return { success: true, result: { data, notes, photo } };
+    return { success: true, result: { data, notes, photo, filenames } };
   } catch (error) {
     return {
       success: false,

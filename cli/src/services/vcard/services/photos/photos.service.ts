@@ -32,28 +32,22 @@ export const getPhotoAsDataURL = async (photo: string): Promise<string> => {
   return `data:${mediaType},${photoBase64}`;
 };
 
-export const getPhotoBasename = (
-  uid: string,
-  mediatype = "image/jpeg"
-): string => {
+export const getPhotoExtension = (mediatype = "image/jpeg"): string => {
   const pieces = mediatype.split("/");
   if (pieces.length !== 2) {
-    return `${uid}.jpeg`;
+    return `.jpeg`;
   }
 
   const [, extension] = pieces;
-  return `${uid}.${extension}`;
+  return extension;
 };
 
 export type Photo = {
-  basename: string;
+  extension: string;
   data: string;
 };
 
-export const getPhotoFromVcfer = (
-  vcard: Vcfer,
-  uid: string
-): Photo | undefined => {
+export const getPhotoFromVcfer = (vcard: Vcfer): Photo | undefined => {
   const photos = vcard.get("photo");
   if (photos.length === 0) {
     return;
@@ -66,10 +60,10 @@ export const getPhotoFromVcfer = (
 
   // There should not be more than 1 mediatype parameter, so cast to string
   const mediatype = photo.params.mediatype as string;
-  const basename = getPhotoBasename(uid, mediatype);
+  const extension = getPhotoExtension(mediatype);
 
   return {
-    basename,
+    extension,
     data,
   };
 };
