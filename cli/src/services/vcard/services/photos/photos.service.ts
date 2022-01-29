@@ -30,3 +30,16 @@ export const getPhotoAsDataURL = async (photo: string): Promise<string> => {
 
   return `data:${mediaType},${photoBase64}`;
 };
+
+export const getPhotoBasename = (
+  uid: string,
+  mediatype = "image/jpeg"
+): string => {
+  const pieces = mediatype.split("/");
+  if (pieces.length !== 2) {
+    return `${uid}.jpeg`;
+  }
+
+  const [, extension] = pieces;
+  return `${uid}.${extension}`;
+};
