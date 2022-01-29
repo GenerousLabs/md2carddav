@@ -264,7 +264,8 @@ const dataFromVcard = (
           return data;
         }
 
-        const [company] = replaceStrings(companies.split(";"));
+        const [companyRough] = companies.split(";");
+        const company = replaceStrings(companyRough);
 
         return { ...data, company };
       }
