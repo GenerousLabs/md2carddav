@@ -30,11 +30,11 @@ export default class MdImport extends Command {
     const context = await getContext(this);
     const {
       config: {
-        md: { directory: mdDirectory, photoDirectory: photoDirectoryConfig },
+        md: { directory: mdDirectory, photosDirectory: photosDirectoryConfig },
       },
     } = context;
 
-    const photoDirectory = photoDirectoryConfig || "";
+    const photosDirectory = photosDirectoryConfig || "";
 
     const directoryPath = resolve(directory);
     const files = await readdirp.promise(directoryPath, {
@@ -83,7 +83,7 @@ export default class MdImport extends Command {
 
         if (typeof photoData !== "undefined") {
           const photo = join(
-            photoDirectory,
+            photosDirectory,
             `${filename}${photoData.extension}`
           );
           const photoPath = join(mdDirectory, photo);

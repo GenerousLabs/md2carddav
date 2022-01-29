@@ -39,7 +39,7 @@ export const getPhotoExtension = (mediatype = "image/jpeg"): string => {
   }
 
   const [, extension] = pieces;
-  return extension;
+  return `.${extension}`;
 };
 
 export type Photo = {

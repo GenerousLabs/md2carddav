@@ -11,7 +11,7 @@ export const ConfigSchema = z
     md: z.object({
       directory: z.string(),
       fileFilter: z.array(z.string()).optional(),
-      photoDirectory: z.string().optional(),
+      photosDirectory: z.string().optional(),
     }),
   })
   .strict();

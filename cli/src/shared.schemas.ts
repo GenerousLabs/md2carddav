@@ -76,7 +76,12 @@ export const ContactSchemaBase = z.object({
   desc: z.string().optional(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ContactSchema = ContactSchemaBase.refine((obj) => {
+  // VCards don't require a name, they can be valid with only an email
+  return true;
+
+  /*
   // Ensure that the object has at least one name
   if (typeof obj.name !== "undefined") {
     if (typeof obj.name.full === "string" && obj.name.full.length > 0) {
@@ -97,4 +102,5 @@ export const ContactSchema = ContactSchemaBase.refine((obj) => {
   }
 
   return false;
+  */
 });

@@ -220,6 +220,11 @@ const getType = (type?: string | string[]) => {
   }
 };
 
+const replaceStrings = (input: string): string => {
+  const replaced = input.replace(/\\n/g, `\n`).replace(/\\,/g, `,`);
+  return replaced;
+};
+
 const dataFromVcard = (
   context: CommandContext,
   vcard: Vcfer,
@@ -241,7 +246,7 @@ const dataFromVcard = (
 
         const [last, first, middle, prefix, suffix] =
           names?.getValue().split(";") || [];
-        const full = vcard.getOne("fn")?.getValue();
+        const full = vcard.getOne("fn")?.getValue().trim();
 
         const name = { full, first, last, middle, prefix, suffix };
 
@@ -254,10 +259,12 @@ const dataFromVcard = (
       }
 
       case "company": {
-        const company = vcard.getOne("org")?.getValue();
-        if (typeof company === "undefined") {
+        const companies = vcard.getOne("org")?.getValue();
+        if (typeof companies === "undefined") {
           return data;
         }
+
+        const [company] = replaceStrings(companies.split(";"));
 
         return { ...data, company };
       }
@@ -405,7 +412,8 @@ const getNote = (vcard: Vcfer) => {
     return;
   }
 
-  const replaced = notes.replace(/\\n/g, `\n`);
+  const replaced = replaceStrings(notes);
+
   return replaced;
 };
 
