@@ -1,7 +1,7 @@
 import { Command } from "@oclif/core";
 import { z } from "zod";
-import { Contact } from "./services/md/services/contacts/contacts.service";
 import { ConfigSchema } from "./shared.config";
+import { ContactSchema } from "./shared.schemas";
 
 export type ErrorResult = {
   success: false;
@@ -21,4 +21,5 @@ export type CommandContext = Pick<Command, "log" | "warn" | "error"> & {
   config: z.infer<typeof ConfigSchema>;
 };
 
-export type ContactFields = keyof Contact;
+export type Contact = z.infer<typeof ContactSchema>;
+export type ContactField = keyof Contact;

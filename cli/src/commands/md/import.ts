@@ -1,11 +1,12 @@
-import * as readdirp from "readdirp";
-import { resolve } from "path";
 import { Command, Flags } from "@oclif/core";
-import Vcfer from "vcfer";
 import { readAsync, writeAsync } from "fs-jetpack";
+import { writeFile } from "fs/promises";
+import * as matter from "gray-matter";
+import { join, resolve } from "path";
+import * as readdirp from "readdirp";
+import { generateContactFromVcard } from "../../services/vcard/vcard.service";
+import { Contact } from "../../shared.types";
 import { getContext } from "../../shared.utils";
-import { strictEqual } from "assert";
-import { getPhotoBasename } from "../../services/vcard/services/photos/photos.service";
 
 export default class MdImport extends Command {
   static description = "Import a directory of .vcf files into markdown";
@@ -29,9 +30,11 @@ export default class MdImport extends Command {
     const context = await getContext(this);
     const {
       config: {
-        md: { directory: mdDirectory },
+        md: { directory: mdDirectory, photoDirectory: photoDirectoryConfig },
       },
     } = context;
+
+    const photoDirectory = photoDirectoryConfig || "";
 
     const directoryPath = resolve(directory);
     const files = await readdirp.promise(directoryPath, {
@@ -41,38 +44,38 @@ export default class MdImport extends Command {
     for (const file of files) {
       // eslint-disable-next-line no-await-in-loop
       const vcfString = await readAsync(file.fullPath);
-      const vcard = new Vcfer(vcfString);
 
-      const uids = vcard.get("uid");
-      if (uids.length !== 1) {
-        this.warn(`Found VCF missing exactly 1 UID. #iUQ31O ${file.fullPath}`);
+      const contactResult = generateContactFromVcard(vcfString as string);
+      if (!contactResult.success) {
+        this.warn(`Failed to create contact #7RBCq2 ${file.fullPath}`);
+        this.debug(contactResult);
         continue;
       }
 
-      const uid = uids[0].getValue();
+      const {
+        result: { data, notes, photo: photoData },
+      } = contactResult;
 
-      const photos = vcard.get("photo");
+      const filename = data.uid;
 
-      this.debug("Parsed vcard #FrDghO", vcard, photos);
-
-      if (photos.length > 0) {
-        const photo = photos[0];
-        const photoBuffer = Buffer.from(photo.getValue(), "base64");
-        // There should not be more than 1 mediatype parameter, so cast to string
-        const mediatype = photo.params.mediatype as string;
-        const basename = getPhotoBasename(uid, mediatype);
-        const photoPath = resolve(mdDirectory, "assets", basename);
-        if (verbose) {
-          this.log(
-            `Saving photo for VCF #FNdBFE ${file.basename} ${photoPath}`
-          );
-        }
-
+      if (typeof photoData !== "undefined") {
+        const photo = join(photoDirectory, `${photoData.basename}`);
+        const photoPath = join(mdDirectory, photo);
         // eslint-disable-next-line no-await-in-loop
-        await writeAsync(photoPath, photoBuffer);
+        await writeAsync(photoPath, Buffer.from(photoData.data, "base64"));
+        (data as Contact).photo = photo;
       }
+
+      const md = matter.stringify(notes || "", data, {
+        skipInvalid: true,
+      } as any);
+      this.debug("Created contact #Ub8qXO", data, photoData, md);
+
+      const mdPath = join(mdDirectory, `${filename}.md`);
+      // eslint-disable-next-line no-await-in-loop
+      await writeAsync(mdPath, md);
     }
 
-    this.log(`Import ${files.length} files #CrbByr`);
+    this.log(`Imported ${files.length} files #CrbByr`);
   }
 }

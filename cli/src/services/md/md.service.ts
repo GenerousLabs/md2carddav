@@ -1,10 +1,7 @@
 import { EntryInfo } from "readdirp";
-import { CommandContext } from "../../shared.types";
+import { CommandContext, Contact } from "../../shared.types";
 import { extendDebugIfPossible } from "../../shared.utils";
-import {
-  Contact,
-  getContactFromYamlFrontmatterData,
-} from "./services/contacts/contacts.service";
+import { getContactFromYamlFrontmatterData } from "./services/contacts/contacts.service";
 import { getFileContents } from "./services/file/file.service";
 import { getFilesFromPath } from "./services/files/files.service";
 import { parseMarkdown } from "./services/markdown/markdown.service";

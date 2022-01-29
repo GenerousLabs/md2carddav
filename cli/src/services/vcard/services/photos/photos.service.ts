@@ -1,3 +1,4 @@
+import Vcfer from "vcfer";
 import { readFile } from "fs/promises";
 
 const getMediaTypeFromFilename = (path: string) => {
@@ -42,4 +43,33 @@ export const getPhotoBasename = (
 
   const [, extension] = pieces;
   return `${uid}.${extension}`;
+};
+
+export type Photo = {
+  basename: string;
+  data: string;
+};
+
+export const getPhotoFromVcfer = (
+  vcard: Vcfer,
+  uid: string
+): Photo | undefined => {
+  const photos = vcard.get("photo");
+  if (photos.length === 0) {
+    return;
+  }
+
+  const photo = photos[0];
+  const data = photo.getValue();
+
+  // const photoBuffer = Buffer.from(photo.getValue(), "base64");
+
+  // There should not be more than 1 mediatype parameter, so cast to string
+  const mediatype = photo.params.mediatype as string;
+  const basename = getPhotoBasename(uid, mediatype);
+
+  return {
+    basename,
+    data,
+  };
 };
