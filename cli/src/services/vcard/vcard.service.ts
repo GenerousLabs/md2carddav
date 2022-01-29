@@ -246,7 +246,8 @@ const dataFromVcard = (
 
         const [last, first, middle, prefix, suffix] =
           names?.getValue().split(";") || [];
-        const full = vcard.getOne("fn")?.getValue().trim();
+        const fullRaw = vcard.getOne("fn")?.getValue().trim();
+        const full = replaceStrings(fullRaw || "");
 
         const name = { full, first, last, middle, prefix, suffix };
 
