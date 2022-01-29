@@ -1,13 +1,12 @@
-oclif-hello-world
+md2carddav
 =================
 
-oclif example Hello World CLI
+Syncing between markdown + yaml frontmatter and CardDAV
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
+[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/md2carddav/)
+[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/GenerousLabs/md2carddav/blob/main/cli/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -29,54 +28,102 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`md2carddav hello PERSON`](#md2carddav-hello-person)
-* [`md2carddav hello world`](#md2carddav-hello-world)
-* [`md2carddav help [COMMAND]`](#md2carddav-help-command)
-* [`md2carddav plugins`](#md2carddav-plugins)
-* [`md2carddav plugins:inspect PLUGIN...`](#md2carddav-pluginsinspect-plugin)
-* [`md2carddav plugins:install PLUGIN...`](#md2carddav-pluginsinstall-plugin)
-* [`md2carddav plugins:link PLUGIN`](#md2carddav-pluginslink-plugin)
-* [`md2carddav plugins:uninstall PLUGIN...`](#md2carddav-pluginsuninstall-plugin)
-* [`md2carddav plugins update`](#md2carddav-plugins-update)
+- [md2carddav](#md2carddav)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`md2carddav carddav fetch`](#md2carddav-carddav-fetch)
+  - [`md2carddav carddav list`](#md2carddav-carddav-list)
+  - [`md2carddav carddav wipe`](#md2carddav-carddav-wipe)
+  - [`md2carddav help [COMMAND]`](#md2carddav-help-command)
+  - [`md2carddav md import`](#md2carddav-md-import)
+  - [`md2carddav md push [FILE]`](#md2carddav-md-push-file)
+  - [`md2carddav plugins`](#md2carddav-plugins)
+  - [`md2carddav plugins:inspect PLUGIN...`](#md2carddav-pluginsinspect-plugin)
+  - [`md2carddav plugins:install PLUGIN...`](#md2carddav-pluginsinstall-plugin)
+  - [`md2carddav plugins:link PLUGIN`](#md2carddav-pluginslink-plugin)
+  - [`md2carddav plugins:uninstall PLUGIN...`](#md2carddav-pluginsuninstall-plugin)
+  - [`md2carddav plugins update`](#md2carddav-plugins-update)
+  - [`md2carddav sync`](#md2carddav-sync)
 
-## `md2carddav hello PERSON`
+## `md2carddav carddav fetch`
 
-Say hello
+fetch vcf files from carddav server into a local directory
 
 ```
 USAGE
-  $ md2carddav hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
+  $ md2carddav carddav fetch -d <value>
 
 FLAGS
-  -f, --from=<value>  (required) Whom is saying hello
+  -d, --directory=<value>  (required) path to save VCF files
 
 DESCRIPTION
-  Say hello
+  fetch vcf files from carddav server into a local directory
+
+  fetch does the following:
+
+  1 - Connects to your configured CardDAV server
+
+  2 - Retrieves a list of address books on that server
+
+  3 - Fetches every VCard in every address book
+
+  4 - Saves them all into your target directory
+
+  - In a folder with the address book display name (slugified)
+
+  - In a file named UID.vcf where UID is the UID of the VCard
+
+  For example addressbook/5182b11b-7ff4-511d-8d92-d45369ec1fac.vcf
+
+  NOTE: This command does not remove any existing files, it is recommended to start with an empty directory.
 
 EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  $ md2carddav carddav fetch
+
+  fetch -d /path/to/put/vcf/files/
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/GenerousLabs/md2carddav/blob/v0.0.0/dist/commands/hello/index.ts)_
+## `md2carddav carddav list`
 
-## `md2carddav hello world`
-
-Say hello world
+List all address books on the configured CardDAV server
 
 ```
 USAGE
-  $ md2carddav hello world
+  $ md2carddav carddav list
 
 DESCRIPTION
-  Say hello world
+  List all address books on the configured CardDAV server
 
 EXAMPLES
-  $ oex hello world
-  hello world! (./src/commands/hello/world.ts)
+  $ md2carddav carddav list
+```
+
+## `md2carddav carddav wipe`
+
+delete every contact in an address book
+
+```
+USAGE
+  $ md2carddav carddav wipe -a <value> [-f] [-v]
+
+FLAGS
+  -a, --address-book=<value>  (required) address book to wipe
+  -f, --force
+  -v, --verbose
+
+DESCRIPTION
+  delete every contact in an address book
+
+  This command is extremely destructive, it will delete every contact in a given address book. It is highly recommended
+  to run fetch first and take a backup.
+
+  Why? This command can be useful if you want to delete all contacts and then push again from markdown. Otherwise
+  contacts will never be deleted.
+
+  Use the list command to list address books, each one must be wiped separately.
+
+EXAMPLES
+  $ md2carddav carddav wipe
 ```
 
 ## `md2carddav help [COMMAND]`
@@ -98,6 +145,43 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
+
+## `md2carddav md import`
+
+Import a directory of .vcf files into markdown
+
+```
+USAGE
+  $ md2carddav md import -d <value> [-v]
+
+FLAGS
+  -d, --directory=<value>  (required) directory of .vcf files
+  -v, --verbose
+
+DESCRIPTION
+  Import a directory of .vcf files into markdown
+
+EXAMPLES
+  $ md2carddav md import
+```
+
+## `md2carddav md push [FILE]`
+
+Push contacts from markdown to CardDAV
+
+```
+USAGE
+  $ md2carddav md push [FILE]
+
+DESCRIPTION
+  Push contacts from markdown to CardDAV
+
+  Load all contacts from markdown, load all contacts from CardDAV, find any which need created or update, and then
+  create or update them on configured the CardDAV server
+
+EXAMPLES
+  $ md2carddav md push
+```
 
 ## `md2carddav plugins`
 
@@ -244,4 +328,25 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
+
+## `md2carddav sync`
+
+Sync from markdown to CardDAV
+
+```
+USAGE
+  $ md2carddav sync -d <value> [-f]
+
+FLAGS
+  -d, --directory=<value>  (required) path to markdown files
+  -f, --force
+
+DESCRIPTION
+  Sync from markdown to CardDAV
+
+EXAMPLES
+  $ md2carddav sync
+```
+
+_See code: [dist/commands/sync.ts](https://github.com/GenerousLabs/md2carddav/blob/v0.0.0/dist/commands/sync.ts)_
 <!-- commandsstop -->
