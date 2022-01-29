@@ -12,6 +12,7 @@ export const getFilesFromPath = async (
   const stats = await fs.inspectAsync(path);
 
   if (typeof stats === "undefined") {
+    // eslint-disable-next-line unicorn/prefer-type-error
     throw new Error(`Path does not exist. #Fb3Don ${path}`);
   }
 

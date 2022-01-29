@@ -46,7 +46,6 @@ NOTE: This command does not remove any existing files, it is recommended to star
 
     const addressBooks = await getVCards(context, clientAndAccount);
 
-    // eslint-disable-next-line guard-for-in
     for (const addressBook of addressBooks) {
       const { vcards, displayName } = addressBook;
 

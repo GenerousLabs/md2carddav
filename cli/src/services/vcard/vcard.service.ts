@@ -40,7 +40,6 @@ export const generateVcardFromContact = async (
 
   const keys = Object.keys(contact) as ContactFields[];
 
-  // eslint-disable-next-line guard-for-in
   for (const key of keys) {
     switch (key) {
       case "uid": {
@@ -92,6 +91,7 @@ export const generateVcardFromContact = async (
 
       case "photo": {
         const { photo } = contact as Required<Contact>;
+        // eslint-disable-next-line no-await-in-loop
         const photoDataURI = await getPhotoAsDataURL(photo);
         vcf.addPhoto(photoDataURI);
         break;
