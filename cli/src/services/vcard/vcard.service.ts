@@ -213,6 +213,17 @@ const getType = (type?: string | string[]) => {
   }
 };
 
+const getNote = (vcard: Vcfer) => {
+  const notes = vcard.getOne("note")?.getValue();
+
+  if (typeof notes === "undefined") {
+    return;
+  }
+
+  const replaced = notes.replace(/\\n/g, `\n`);
+  return replaced;
+};
+
 const dataFromVcard = (
   vcard: Vcfer,
   uid: string
@@ -375,7 +386,7 @@ export const generateContactFromVcard = (
 
   const photo = getPhotoFromVcfer(vcard, uid);
 
-  const notes = vcard.getOne("note")?.getValue();
+  const notes = getNote(vcard);
 
   try {
     const data = dataFromVcard(vcard, uid);
