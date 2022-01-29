@@ -24,6 +24,7 @@ export default class MdPush extends Command {
     const {
       config: {
         carddav: { syncAddressBookDisplayName },
+        md: { directory: mdDirectory },
       },
     } = context;
     if (typeof syncAddressBookDisplayName === "undefined") {
@@ -64,7 +65,10 @@ export default class MdPush extends Command {
         contact: { uid },
       } = contact;
       // eslint-disable-next-line no-await-in-loop
-      const vcard = await generateVcardFromContact(contact.contact);
+      const vcard = await generateVcardFromContact(
+        mdDirectory,
+        contact.contact
+      );
 
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
 

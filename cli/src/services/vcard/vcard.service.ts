@@ -47,6 +47,7 @@ export const getUidFromVcard = (input: string): Returns<string> => {
 
 // eslint-disable-next-line complexity
 export const generateVcardFromContact = async (
+  mdDirectory: string,
   contact: Contact
 ): Promise<string> => {
   const vcf = new VCard();
@@ -105,7 +106,7 @@ export const generateVcardFromContact = async (
       case "photo": {
         const { photo } = contact as Required<Contact>;
         // eslint-disable-next-line no-await-in-loop
-        const photoDataURI = await getPhotoAsDataURL(photo);
+        const photoDataURI = await getPhotoAsDataURL(mdDirectory, photo);
         vcf.addPhoto(photoDataURI);
         break;
       }

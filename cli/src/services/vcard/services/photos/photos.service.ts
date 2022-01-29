@@ -1,5 +1,7 @@
 import Vcfer from "vcfer";
 import { readFile } from "fs/promises";
+import { CommandContext } from "../../../../shared.types";
+import { join } from "path";
 
 const getMediaTypeFromFilename = (path: string) => {
   if (path.endsWith(".jpeg") || path.endsWith("jpg")) {
@@ -15,7 +17,10 @@ const getMediaTypeFromFilename = (path: string) => {
   }
 };
 
-export const getPhotoAsDataURL = async (photo: string): Promise<string> => {
+export const getPhotoAsDataURL = async (
+  mdDirectory: string,
+  photo: string
+): Promise<string> => {
   if (photo.slice(0, 5) === "data:") {
     return photo;
   }
@@ -27,7 +32,8 @@ export const getPhotoAsDataURL = async (photo: string): Promise<string> => {
     throw new Error("Invalid photo (not jpg, jpeg, png, gif). #UDfMFq");
   }
 
-  const photoBase64 = await readFile(photo, "base64");
+  const photoPath = join(mdDirectory, photo);
+  const photoBase64 = await readFile(photoPath, "base64");
 
   return `data:${mediaType},${photoBase64}`;
 };
