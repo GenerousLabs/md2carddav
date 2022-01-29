@@ -6028,10 +6028,10 @@ ts-node@^10.4.0:
     make-error "^1.1.1"
     yn "3.1.1"
 
-tsdav@^2.0.0-rc.2:
-  version "2.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/tsdav/-/tsdav-2.0.0-rc.2.tgz#5147fc350e7dc5d311483d6d2002d1c891c92441"
-  integrity sha512-2wsH46VH/gjyat5VdEL7LIDb3mfVWqG+BJ/ylymdS3bDJauYF8OW6bu4orTj25MKR1EjdNtX0pw6s2bwpeX9RQ==
+tsdav@^2.0.0-rc.3:
+  version "2.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/tsdav/-/tsdav-2.0.0-rc.3.tgz#b8cef07079e69a65be4d1404c91a6dbd319fa5b0"
+  integrity sha512-F6YxPB+dA5TP5KIr4NgfzQtPO7Pvf6XLwDjkpkWw6FhAdtshN97AVR+kP+DPcyUp2df3vMK9YS+XEOcpqwxCCw==
   dependencies:
     base-64 "1.0.0"
     cross-fetch "3.1.5"
