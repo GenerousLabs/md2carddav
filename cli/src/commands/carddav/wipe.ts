@@ -1,7 +1,9 @@
 import { Command, Flags } from "@oclif/core";
 
 export default class CarddavWipe extends Command {
-  static description = "describe the command here";
+  static description = `delete every contact in an address book
+  This command is extremely destructive, it will delete every contact in a given address book. It is highly recommended to run fetch first and take a backup.
+  Why? This command can be useful if you want to delete all contacts and then push again from markdown. Otherwise contacts will never be deleted.`;
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
@@ -17,10 +19,11 @@ export default class CarddavWipe extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(CarddavWipe);
 
-    const name = flags.name ?? "world";
-    this.log(`hello ${name}`);
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`);
+    if (!flags.force) {
+      this.log("Refusing to run without the --force flag.");
+      return;
     }
+
+    this.log("list #6NPfxJ", args, flags);
   }
 }
