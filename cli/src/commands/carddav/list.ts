@@ -1,4 +1,6 @@
-import { Command, Flags } from "@oclif/core";
+import { Command } from "@oclif/core";
+import { getClientAndAccount } from "../../services/carddav/carddav.service";
+import { getContext } from "../../shared.utils";
 
 export default class CarddavList extends Command {
   static description =
@@ -6,17 +8,24 @@ export default class CarddavList extends Command {
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
-  static flags = {
-    // flag with a value (-n, --name=VALUE)
-    name: Flags.string({ char: "n", description: "name to print" }),
-    // flag with no value (-f, --force)
-    force: Flags.boolean({ char: "f" }),
-  };
-
-  static args = [{ name: "file" }];
-
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(CarddavList);
-    this.log("list", args, flags);
+    const context = await getContext(this);
+
+    const { client, account } = await getClientAndAccount(context);
+
+    const addressBooks = await client.fetchAddressBooks({ account });
+
+    for (const addressBook of addressBooks) {
+      const { url, displayName } = addressBook;
+
+      if (typeof displayName === "string") {
+        this.log(displayName);
+        continue;
+      }
+
+      this.warn(`This address book is missing a name. #j4s08u ${url}`);
+      this.debug(addressBook);
+      this.log(url);
+    }
   }
 }
