@@ -26,7 +26,7 @@
     "gray-matter": "^4.0.3",
     "readdirp": "^3.6.0",
     "slugify": "^1.6.5",
-    "tsdav": "^2.0.0-rc.1",
+    "tsdav": "^2.0.0-rc.2",
     "zod": "^3.11.6"
   },
   "devDependencies": {

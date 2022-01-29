@@ -2282,10 +2282,10 @@ eslint-config-xo@^0.38.0:
   dependencies:
     confusing-browser-globals "1.0.10"
 
-eslint-module-utils@2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.2.tgz#1d0aa455dcf41052339b63cada8ab5fd57577129"
-  integrity sha512-zquepFnWCY2ISMFwD/DqzaM++H+7PDzOpUvotJWm/y1BAFt5R4oeULgdrTejKqLkz7MA/tgstsUMNYc7wNdTrg==
+eslint-module-utils@2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.7.3.tgz#ad7e3a10552fdd0642e1e55292781bd6e34876ee"
+  integrity sha512-088JEC7O3lDZM9xGe0RerkOMd0EjFl+Yvd1jPWIkMT5u3H9+HC34mWWPnqPrN13gieT9pBOO+Qt07Nb/6TresQ==
   dependencies:
     debug "^3.2.7"
     find-up "^2.1.0"
@@ -5824,15 +5824,15 @@ ts-node@^10.4.0:
     make-error "^1.1.1"
     yn "3.1.1"
 
-tsdav@^2.0.0-rc.1:
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/tsdav/-/tsdav-2.0.0-rc.1.tgz#aba47a6d7195a67de2c6dd60e648d08130ab809a"
-  integrity sha512-pRqW/g8Awy6hNRyodB81Tv/m50k4tC/xpgH1A1zRSBSKrIpddTcu29IlIFvVBVrKDisibgIqSO8lF7qD83isUQ==
+tsdav@^2.0.0-rc.2:
+  version "2.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/tsdav/-/tsdav-2.0.0-rc.2.tgz#5147fc350e7dc5d311483d6d2002d1c891c92441"
+  integrity sha512-2wsH46VH/gjyat5VdEL7LIDb3mfVWqG+BJ/ylymdS3bDJauYF8OW6bu4orTj25MKR1EjdNtX0pw6s2bwpeX9RQ==
   dependencies:
     base-64 "1.0.0"
     cross-fetch "3.1.5"
     debug "4.3.3"
-    eslint-module-utils "2.7.2"
+    eslint-module-utils "2.7.3"
     rollup-plugin-node-builtins "2.1.2"
     rollup-plugin-polyfill-node "0.8.0"
     xml-js "1.6.11"
