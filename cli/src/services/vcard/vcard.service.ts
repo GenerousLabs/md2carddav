@@ -365,28 +365,34 @@ const dataFromVcard = (
 };
 
 export const _getFilenames = (data: Contact): string[] => {
-  const { name, uid, company } = data;
+  const { name, uid, company, emails } = data;
 
-  if (typeof name === "undefined") {
-    if (typeof company === "string" && company.trim().length > 0) {
-      return [slugify(company, { lower: true }), uid];
+  if (typeof name !== "undefined") {
+    const { full, first, middle, last } = name;
+
+    if (typeof full === "string" && full.trim().length > 0) {
+      return [slugify(full, { lower: true }), uid];
     }
 
-    return [uid];
+    const fullName = [first, last, middle]
+      .filter((a) => typeof a === "string" && a.trim().length > 0)
+      .join(" ");
+
+    if (fullName.length > 0) {
+      return [slugify(fullName, { lower: true }), uid];
+    }
   }
 
-  const { full, first, middle, last } = name;
-
-  if (typeof full === "string" && full.trim().length > 0) {
-    return [slugify(full, { lower: true }), uid];
+  if (typeof company === "string" && company.trim().length > 0) {
+    return [slugify(company, { lower: true }), uid];
   }
 
-  const fullName = [first, last, middle]
-    .filter((a) => typeof a === "string" && a.trim().length > 0)
-    .join(" ");
-
-  if (fullName.length > 0) {
-    return [slugify(fullName, { lower: true }), uid];
+  if (typeof emails !== "undefined") {
+    const [emailRecord] = emails;
+    const email =
+      typeof emailRecord === "string" ? emailRecord : emailRecord.email;
+    const emailForSlugging = email.replaceAll(/[.@]/g, "-");
+    return [slugify(emailForSlugging, { lower: true, strict: true }), uid];
   }
 
   return [uid];

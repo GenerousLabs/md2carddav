@@ -96,7 +96,7 @@ describe("vcard.service", () => {
       expect(_getFilenames({ uid: "1" })).to.eql(["1"]);
     });
 
-    test.it("Returns a company name if that's all there is #ER3qmD", () => {
+    test.it("Returns a company name when there is nothing else #ER3qmD", () => {
       expect(_getFilenames({ uid: "1", company: "JD Inc" })).to.eql([
         "jd-inc",
         "1",
@@ -115,5 +115,12 @@ describe("vcard.service", () => {
         ).to.eql(["jane-doe", "1"]);
       }
     );
+
+    test.it("Returns an email when there is nothing else #dF5e3F", () => {
+      expect(_getFilenames({ uid: "1", emails: ["jd@domain.tld"] })).to.eql([
+        "jd-domain-tld",
+        "1",
+      ]);
+    });
   });
 });
