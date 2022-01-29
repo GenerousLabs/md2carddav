@@ -53,4 +53,6 @@ describe("vcard.service", () => {
       );
     }
   );
+
+  test.it("Correctly encodes a photo #lz7uNX");
 });
