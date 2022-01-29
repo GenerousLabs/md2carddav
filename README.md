@@ -18,3 +18,6 @@ deletions to the CardDAV server except during a wipe operation.
 See the `cli/` directory for instructions on usage. Currently (v0.1.0) the
 package is not published anywhere (npm, etc), and binaries are not available on
 GitHub. If anybody actually ever uses the code, such things may happen.
+
+If you want to self host, [xandikos](https://xandikos.org) is a CardDAV server
+which uses a git repo for its data store.
