@@ -6,6 +6,6 @@
     "prettier"
   ],
   "rules": {
-    "unicorn/prefer-node-protocol": false
+    "unicorn/prefer-node-protocol": 0
   }
 }
