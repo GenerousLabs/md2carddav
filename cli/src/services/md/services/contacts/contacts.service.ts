@@ -15,6 +15,7 @@ const ContactSchema = z
         suffix: z.string().or(z.string().array()).optional(),
       })
       .optional(),
+    photo: z.string().optional(),
     phones: z
       .array(
         z

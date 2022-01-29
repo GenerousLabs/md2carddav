@@ -72,7 +72,8 @@ export default class MdPush extends Command {
       const {
         contact: { uid },
       } = contact;
-      const vcard = generateVcardFromContact(contact.contact);
+      // eslint-disable-next-line no-await-in-loop
+      const vcard = await generateVcardFromContact(contact.contact);
 
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
 

@@ -32,7 +32,9 @@ export const getUidFromVcard = (input: string): Returns<string> => {
 };
 
 // eslint-disable-next-line complexity
-export const generateVcardFromContact = (contact: Contact): string => {
+export const generateVcardFromContact = async (
+  contact: Contact
+): Promise<string> => {
   const vcf = new VCard();
 
   const keys = Object.keys(contact) as ContactFields[];
@@ -84,6 +86,11 @@ export const generateVcardFromContact = (contact: Contact): string => {
           suffix.forEach((val) => vcf.addSuffixName(val));
         }
 
+        break;
+      }
+
+      case "photo": {
+        throw new Error("Photos not yet implemented.");
         break;
       }
 
