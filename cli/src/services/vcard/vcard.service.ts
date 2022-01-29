@@ -278,7 +278,7 @@ const dataFromVcard = (
         }
 
         const phones = vals.map((val) => {
-          const phone = val.getValue();
+          const phone = val.getValue().replace(/\s/g, " ");
           const type = getType(val.params.type);
           if (typeof type === "undefined") {
             return phone;
