@@ -255,6 +255,36 @@ const replaceStrings = (input: string): string => {
   return replaced;
 };
 
+const ensureTitleExists = (data: Partial<Contact>): Partial<Contact> => {
+  const { title, name, company, emails } = data;
+
+  if (typeof title === "string" && title.trim().length > 0) {
+    return data;
+  }
+
+  if (typeof name !== "undefined") {
+    const { first, last } = name;
+    const firstString = Array.isArray(first) ? first.join(" ") : first;
+    const lastString = Array.isArray(last) ? last.join(" ") : last;
+    const title = [firstString, lastString].join(" ").trim();
+    if (title.length > 0) {
+      return { ...data, title };
+    }
+  }
+
+  if (typeof company === "string" && company.trim().length > 0) {
+    return { ...data, title: company };
+  }
+
+  if (typeof emails !== "undefined") {
+    const [email] = emails;
+    const title = typeof email === "string" ? email : email.email;
+    return { ...data, title };
+  }
+
+  return data;
+};
+
 const dataFromVcard = (
   context: CommandContext,
   vcard: Vcfer,
@@ -265,7 +295,7 @@ const dataFromVcard = (
   const keys = Object.keys(ContactSchema.shape) as ContactField[];
 
   // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce
-  const data = keys.reduce((data, key) => {
+  const data: Partial<Contact> = keys.reduce((data, key) => {
     switch (key) {
       case "uid": {
         return { ...data, uid };
@@ -398,9 +428,15 @@ const dataFromVcard = (
     }
   }, {});
 
-  const cleaned = clean(data);
+  const cleaned = clean(data) as Partial<Contact>;
 
-  const result = ContactSchema.safeParse(cleaned);
+  // NOTE: At this point, it's possible that the contact data is valid as a
+  // VCard but does not match our schema. Our schema requires a non empty
+  // `title` (mapped to full name in the VCard).
+
+  const withTitle = ensureTitleExists(cleaned);
+
+  const result = ContactSchema.safeParse(withTitle);
 
   if (result.success === true) {
     return result.data;
