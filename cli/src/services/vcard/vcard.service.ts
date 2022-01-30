@@ -274,7 +274,7 @@ const dataFromVcard = (
       case "title": {
         const title = replaceStrings(vcard.getOne("fn")?.getValue() || "");
         if (title.length > 0) {
-          return { data, title };
+          return { ...data, title };
         }
 
         return data;
