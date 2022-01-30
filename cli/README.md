@@ -19,7 +19,7 @@ $ npm install -g md2carddav
 $ md2carddav COMMAND
 running command...
 $ md2carddav (--version)
-md2carddav/0.0.0 darwin-x64 node-v17.3.1
+md2carddav/0.1.0 darwin-x64 node-v17.3.1
 $ md2carddav --help [COMMAND]
 USAGE
   $ md2carddav COMMAND
@@ -28,22 +28,19 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [md2carddav](#md2carddav)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`md2carddav carddav fetch`](#md2carddav-carddav-fetch)
-  - [`md2carddav carddav list`](#md2carddav-carddav-list)
-  - [`md2carddav carddav wipe`](#md2carddav-carddav-wipe)
-  - [`md2carddav help [COMMAND]`](#md2carddav-help-command)
-  - [`md2carddav md import`](#md2carddav-md-import)
-  - [`md2carddav md push [FILE]`](#md2carddav-md-push-file)
-  - [`md2carddav plugins`](#md2carddav-plugins)
-  - [`md2carddav plugins:inspect PLUGIN...`](#md2carddav-pluginsinspect-plugin)
-  - [`md2carddav plugins:install PLUGIN...`](#md2carddav-pluginsinstall-plugin)
-  - [`md2carddav plugins:link PLUGIN`](#md2carddav-pluginslink-plugin)
-  - [`md2carddav plugins:uninstall PLUGIN...`](#md2carddav-pluginsuninstall-plugin)
-  - [`md2carddav plugins update`](#md2carddav-plugins-update)
-  - [`md2carddav sync`](#md2carddav-sync)
+* [`md2carddav carddav fetch`](#md2carddav-carddav-fetch)
+* [`md2carddav carddav list`](#md2carddav-carddav-list)
+* [`md2carddav carddav wipe`](#md2carddav-carddav-wipe)
+* [`md2carddav help [COMMAND]`](#md2carddav-help-command)
+* [`md2carddav md import`](#md2carddav-md-import)
+* [`md2carddav md push`](#md2carddav-md-push)
+* [`md2carddav plugins`](#md2carddav-plugins)
+* [`md2carddav plugins:inspect PLUGIN...`](#md2carddav-pluginsinspect-plugin)
+* [`md2carddav plugins:install PLUGIN...`](#md2carddav-pluginsinstall-plugin)
+* [`md2carddav plugins:link PLUGIN`](#md2carddav-pluginslink-plugin)
+* [`md2carddav plugins:uninstall PLUGIN...`](#md2carddav-pluginsuninstall-plugin)
+* [`md2carddav plugins update`](#md2carddav-plugins-update)
+* [`md2carddav sync`](#md2carddav-sync)
 
 ## `md2carddav carddav fetch`
 
@@ -152,11 +149,12 @@ Import a directory of .vcf files into markdown
 
 ```
 USAGE
-  $ md2carddav md import -d <value> [-v]
+  $ md2carddav md import -d <value> [-m] [-v]
 
 FLAGS
   -d, --directory=<value>  (required) directory of .vcf files
-  -v, --verbose
+  -m, --add-meta           Add id, created, updated metadata fields to all contacts.
+  -v, --verbose            Output more detail as the program runs.
 
 DESCRIPTION
   Import a directory of .vcf files into markdown
@@ -165,13 +163,16 @@ EXAMPLES
   $ md2carddav md import
 ```
 
-## `md2carddav md push [FILE]`
+## `md2carddav md push`
 
 Push contacts from markdown to CardDAV
 
 ```
 USAGE
-  $ md2carddav md push [FILE]
+  $ md2carddav md push [-v]
+
+FLAGS
+  -v, --verbose
 
 DESCRIPTION
   Push contacts from markdown to CardDAV
@@ -348,5 +349,5 @@ EXAMPLES
   $ md2carddav sync
 ```
 
-_See code: [dist/commands/sync.ts](https://github.com/GenerousLabs/md2carddav/blob/v0.0.0/dist/commands/sync.ts)_
+_See code: [dist/commands/sync.ts](https://github.com/GenerousLabs/md2carddav/blob/v0.1.0/dist/commands/sync.ts)_
 <!-- commandsstop -->
