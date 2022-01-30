@@ -41,7 +41,14 @@ export default class MdPush extends Command {
 
     this.debug("Got context #5mjOU9", context);
 
+    if (verbose) {
+      this.log(
+        "Connecting to CardDAV server. Can take several minutes. #p5UwNl"
+      );
+    }
+
     const clientAndAccount = await getClientAndAccount(context);
+    this.debug("Got client and account #0ShLHl");
 
     const addressBooks = await getVCards(context, clientAndAccount);
     for (const addressBook of addressBooks) {
