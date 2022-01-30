@@ -90,3 +90,9 @@ spec, see the `cli/src/shared.config.ts` file for the config schema.
   }
 }
 ```
+
+## Limitations
+
+- Currently (v.0.1.0) the code only supports username & password authentication
+for CardDAV servers. It uses [tsdav](https://github.com/natelindev/tsdav) which
+supports other methods, but they have not (yet) been implemented.
