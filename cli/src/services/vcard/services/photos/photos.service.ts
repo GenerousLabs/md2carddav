@@ -1,7 +1,6 @@
-import Vcfer from "vcfer";
 import { readFile } from "fs/promises";
-import { CommandContext } from "../../../../shared.types";
 import { join } from "path";
+import Vcfer from "vcfer";
 
 const getMediaTypeFromFilename = (path: string) => {
   if (path.endsWith(".jpeg") || path.endsWith("jpg")) {
