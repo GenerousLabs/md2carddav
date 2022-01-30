@@ -2,8 +2,8 @@ import { expect, test } from "@oclif/test";
 import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
 
 const baseContact = {
-  uid: "1",
-  name: { full: "JD" },
+  uid: "123",
+  title: "JD",
 };
 
 const expectValidHelper = (input: any) => {
@@ -68,23 +68,26 @@ describe("contacts.service", () => {
     });
   });
 
-  test.it("Rejects a record without a name #yOHwJm", () => {
-    expectInvalidHelper({ uid: "1", emails: ["md@domain.tld"] });
+  test.it("Rejects a record without a title #yOHwJm", () => {
+    expectInvalidHelper({
+      uid: "123",
+      emails: ["md@domain.tld"],
+    });
   });
 
-  test.it("Accepts a record with only a first name #ooTQiK", () => {
-    expectValidHelper({ uid: "1", name: { first: "Jane" } });
+  test.it("Accepts a record with only a title & first name #ooTQiK", () => {
+    expectValidHelper({ uid: "123", title: "Jane", name: { first: "Jane" } });
   });
 
-  test.it("Accepts a record with only a last name #Q64LNK", () => {
-    expectValidHelper({ uid: "1", name: { last: "Doe" } });
+  test.it("Accepts a record with only a title & last name #Q64LNK", () => {
+    expectValidHelper({ uid: "123", title: "Doe", name: { last: "Doe" } });
   });
 
-  test.it("Accepts a record with only a company name #4fH3w3", () => {
-    expectValidHelper({ uid: "1", company: "JD Inc" });
+  test.it("Accepts a record with only a title & company name #4fH3w3", () => {
+    expectValidHelper({ uid: "123", title: "JD Inc", company: "JD Inc" });
   });
 
-  test.it("Accepts a record with only a full name #2TUTOi", () => {
-    expectValidHelper({ uid: "1", name: { full: "Jane Doe" } });
+  test.it("Accepts a record with only a title #2TUTOi", () => {
+    expectValidHelper({ uid: "123", title: "Jane Doe" });
   });
 });

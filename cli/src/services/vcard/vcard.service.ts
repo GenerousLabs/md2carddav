@@ -3,7 +3,7 @@ import { VCard } from "@covve/easy-vcard";
 import * as clean from "obj-clean";
 import slugify from "slugify";
 import Vcfer from "vcfer";
-import { ContactSchema, ContactSchemaBase } from "../../shared.schemas";
+import { ContactSchema } from "../../shared.schemas";
 import {
   CommandContext,
   Contact,
@@ -61,14 +61,16 @@ export const generateVcardFromContact = async (
         break;
       }
 
+      case "title": {
+        const { title } = contact;
+        vcf.setFullName(title);
+        break;
+      }
+
       case "name": {
         const {
-          name: { full, first, middle, last, prefix, suffix },
+          name: { first, middle, last, prefix, suffix },
         } = contact as Required<Contact>;
-
-        if (typeof full === "string") {
-          vcf.setFullName(full);
-        }
 
         if (typeof first === "string") {
           vcf.addFirstName(first);
@@ -260,7 +262,7 @@ const dataFromVcard = (
 ): Omit<Contact, "photo" | "desc"> => {
   const debug = extendDebugIfPossible(context.debug, "dataFromVcard");
 
-  const keys = Object.keys(ContactSchemaBase.shape) as ContactField[];
+  const keys = Object.keys(ContactSchema.shape) as ContactField[];
 
   // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce
   const data = keys.reduce((data, key) => {
@@ -269,15 +271,22 @@ const dataFromVcard = (
         return { ...data, uid };
       }
 
+      case "title": {
+        const title = replaceStrings(vcard.getOne("fn")?.getValue() || "");
+        if (title.length > 0) {
+          return { data, title };
+        }
+
+        return data;
+      }
+
       case "name": {
         const names = vcard.getOne("n");
 
         const [last, first, middle, prefix, suffix] =
           names?.getValue().split(";") || [];
-        const fullRaw = vcard.getOne("fn")?.getValue().trim();
-        const full = replaceStrings(fullRaw || "");
 
-        const name = { full, first, last, middle, prefix, suffix };
+        const name = { first, last, middle, prefix, suffix };
 
         return { ...data, name };
       }
@@ -402,37 +411,11 @@ const dataFromVcard = (
 };
 
 export const _getFilenames = (data: Contact): string[] => {
-  const { name, uid, company, emails } = data;
+  const { title, uid } = data;
+  const titleProcessed = title.replace(/[.@]/g, "-");
+  const titleSlug = slugify(titleProcessed, { lower: true, strict: true });
 
-  if (typeof name !== "undefined") {
-    const { full, first, middle, last } = name;
-
-    if (typeof full === "string" && full.trim().length > 0) {
-      return [slugify(full, { lower: true }), uid];
-    }
-
-    const fullName = [first, last, middle]
-      .filter((a) => typeof a === "string" && a.trim().length > 0)
-      .join(" ");
-
-    if (fullName.length > 0) {
-      return [slugify(fullName, { lower: true }), uid];
-    }
-  }
-
-  if (typeof company === "string" && company.trim().length > 0) {
-    return [slugify(company, { lower: true }), uid];
-  }
-
-  if (typeof emails !== "undefined") {
-    const [emailRecord] = emails;
-    const email =
-      typeof emailRecord === "string" ? emailRecord : emailRecord.email;
-    const emailForSlugging = email.replaceAll(/[.@]/g, "-");
-    return [slugify(emailForSlugging, { lower: true, strict: true }), uid];
-  }
-
-  return [uid];
+  return [titleSlug, uid];
 };
 
 const getNote = (vcard: Vcfer) => {
