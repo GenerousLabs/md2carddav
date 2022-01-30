@@ -206,9 +206,36 @@ export const generateVcardFromContact = async (
     }
   }
 
-  const vcardOutput = vcf.toVcard();
+  try {
+    // This will throw if there is no name
+    const vcardOutput = vcf.toVcard();
+    return vcardOutput;
+  } catch (error) {
+    // The exception throw when there's no name is not typed, so we can only
+    // check if it matches a message, flaky...
+    if (error instanceof Error && error.message.includes("name is mandatory")) {
+      if (
+        typeof contact.company === "string" &&
+        contact.company.trim().length > 0
+      ) {
+        vcf.setFullName(contact.company);
+        const vcardOutput = vcf.toVcard();
+        return vcardOutput;
+      }
 
-  return vcardOutput;
+      if (typeof contact.emails !== "undefined" && contact.emails.length > 0) {
+        const [email] = contact.emails;
+        const emailAddress = typeof email === "string" ? email : email.email;
+        if (emailAddress.trim().length > 0) {
+          vcf.setFullName(emailAddress);
+          const vcardOutput = vcf.toVcard();
+          return vcardOutput;
+        }
+      }
+    }
+
+    throw error;
+  }
 };
 
 const getType = (type?: string | string[]) => {
