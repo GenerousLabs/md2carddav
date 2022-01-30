@@ -1,4 +1,4 @@
-import { Command } from "@oclif/core";
+import { Command, Flags } from "@oclif/core";
 import {
   getClientAndAccount,
   getVCards,
@@ -16,8 +16,14 @@ export default class MdPush extends Command {
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
+  static flags = {
+    verbose: Flags.boolean({ char: "v" }),
+  };
+
   public async run(): Promise<void> {
-    // const { args, flags } = await this.parse(MdPush);
+    const {
+      flags: { verbose },
+    } = await this.parse(MdPush);
 
     const context = await getContext(this);
 
@@ -33,8 +39,7 @@ export default class MdPush extends Command {
       );
     }
 
-    this.debug("got context #5mjOU9");
-    this.debug(context);
+    this.debug("Got context #5mjOU9", context);
 
     const clientAndAccount = await getClientAndAccount(context);
 
@@ -55,8 +60,16 @@ export default class MdPush extends Command {
 
     const { vcards } = addressBook;
 
+    if (verbose) {
+      this.log(`Found ${vcards.length} VCards. #vGWp2R`);
+    }
+
     const contacts = await getMdContacts(context);
     this.debug("Got contacts #iI2F1l", contacts.length, contacts);
+
+    if (verbose) {
+      this.log(`Found ${contacts.length} markdown contacts. #aofT8L`);
+    }
 
     const { client } = clientAndAccount;
 
@@ -83,8 +96,14 @@ export default class MdPush extends Command {
         });
 
         if (!result.ok) {
-          this.debug("Failed to push vcf #bifKkH", uid, result);
+          this.warn(
+            `Failed to create new VCard #bifKkH UID: ${uid}, Result: ${result}`
+          );
           this.error("Failed to push vcf #E5ysfm");
+        }
+
+        if (verbose) {
+          this.log(`Successfully created new VCard #r5gYBn UID: ${uid}`);
         }
 
         continue;
@@ -94,6 +113,12 @@ export default class MdPush extends Command {
 
       if (vcard === existingVcard.vcard.data) {
         this.debug("No changes in vcard, skipping update #B07yJK", uid);
+        if (verbose) {
+          this.log(
+            `Skipping VCard which does not require update #ivh1lh UID: ${uid}`
+          );
+        }
+
         continue;
       }
 
@@ -107,11 +132,16 @@ export default class MdPush extends Command {
       });
 
       if (!result.ok) {
-        this.debug("Failed to update vcf #4Xb28G", uid, result);
+        this.warn(
+          `Failed to update VCard #4Xb28G UID: ${uid}, Result: ${result}`
+        );
         this.error("Failed to update vcf #6TqyU3");
       }
 
       this.debug("Successfully updated vcard #V6VG0x", uid, vcard, result);
+      if (verbose) {
+        this.log(`Successfully synced changes to VCard #tp11hW UID: ${uid}`);
+      }
     }
   }
 }
