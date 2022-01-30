@@ -84,8 +84,10 @@ spec, see the `cli/src/shared.config.ts` file for the config schema.
 {
   "carddav": {
     "url": "https://domain.tld/",
-    "username": "",
-    "password": "",
+    "credentials": {
+      "username": "",
+      "password": ""
+    },
     "syncAddressBookDisplayName": ""
   },
   "md": {

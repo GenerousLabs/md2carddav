@@ -13,18 +13,18 @@ export const getClientAndAccount = async (
   const {
     debug,
     config: {
-      carddav: { url: serverUrl, username, password },
+      carddav: { url: serverUrl, authMethod, credentials },
     },
   } = context;
 
   const client = await createDAVClient({
     serverUrl,
-    authMethod: "Basic",
-    credentials: {
-      username,
-      password,
-    },
+    authMethod,
+    credentials,
+    defaultAccountType: "carddav",
   });
+
+  await client.login();
 
   const account = await client.createAccount({
     account: {
