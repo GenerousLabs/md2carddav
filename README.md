@@ -2,6 +2,8 @@
 
 Syncing between markdown + yaml frontmatter and CardDAV
 
+## Intro
+
 This is a console application (cli) written with [oclif](oclif.io/). The code is
 an early release, is written for personal use by the author(s) and comes with no
 warranty. It may or may not be useful to you.
@@ -21,6 +23,14 @@ GitHub. If anybody actually ever uses the code, such things may happen.
 
 If you want to self host, [xandikos](https://xandikos.org) is a CardDAV server
 which uses a git repo for its data store.
+
+## Why
+
+- My data, my rules, under my control.
+- Everything in plain text files (optionally tracked in git).
+- Including contacts inside a digital garden allows for:
+  - Notes related to people
+  - Tasks in relation to contacts
 
 ## Features
 
