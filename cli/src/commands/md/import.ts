@@ -79,8 +79,6 @@ export default class MdImport extends Command {
           this.warn(`Duplicate filename for contact. #gRaJ4T ${file.fullPath}`);
         }
 
-        // Calculate a filenam here
-
         if (typeof photoData !== "undefined") {
           const photo = join(
             photosDirectory,
