@@ -37,9 +37,56 @@ which uses a git repo for its data store.
 - Fetch all VCards from a CardDAV server and save to disk locally
   - Versioning that folder with git is a great idea!
 - Delete all VCards from a given address book on a CardDAV server
-  - Currently (v0.1.0) there is no sync functionality, it's only 1 way, the vision is that the markdown files are the "master copy" or "source of truth", deleting from the CardDAV server may be required periodically to clean up data removed from markdown as there is currently (v0.1.0) no deleting of missing data.
+  - Currently (v0.1.0) there is no sync functionality, it's only 1 way, the
+  vision is that the markdown files are the "master copy" or "source of truth",
+  deleting from the CardDAV server may be required periodically to clean up data
+  removed from markdown as there is currently (v0.1.0) no deleting of missing
+  data.
 - Import a folder of VCards into correctly formatted markdown files
-  - Primary target is dendron compatibility, but these are just plain markdown files so any markdown editor / digital garden / second brain system should hopefully be compatible
+  - Primary target is dendron compatibility, but these are just plain markdown
+  files so any markdown editor / digital garden / second brain system should
+  hopefully be compatible
 - Given a folder of markdown contact files, push each one to a CardDAV server
   - Currently (v.0.1.0) the deduplication checking is extremely basic
   - All records are matched by the `uid` field only
+
+## Getting started
+
+Currently (v0.1.0) there's no releases (yet). To use this, you'll need to clone
+this repo, install dependencies, and then build the cli.
+
+Requirements
+
+- node (v16)
+- yarn
+
+Instructions
+
+- Clone this repo
+- Run `yarn` in the `cli/` directory
+- Run `yarn build` to build
+- Run `yarn link` to make the `md2carddav` command available in your path
+
+You'll need to create a config file called `.md2carddavrc.json` in the current
+working directory where ou run the program.
+
+## Config
+
+Here's an example config file (as of v0.1.0). But for the most up to date config
+spec, see the `cli/src/shared.config.ts` file for the config schema.
+
+```json
+{
+  "carddav": {
+    "url": "https://domain.tld/",
+    "username": "",
+    "password": "",
+    "syncAddressBookDisplayName": ""
+  },
+  "md": {
+    "directory": "/absolute/path/to/md/",
+    "fileFilter": ["*.contact.md"],
+    "photosDirectory": "assets"
+  }
+}
+```
