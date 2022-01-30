@@ -1,6 +1,6 @@
 {
   "name": "md2carddav",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Sync between markdown + yaml and CardDAV.",
   "author": "Callum Macdonald @chmac",
   "bin": {
