@@ -21,3 +21,13 @@ GitHub. If anybody actually ever uses the code, such things may happen.
 
 If you want to self host, [xandikos](https://xandikos.org) is a CardDAV server
 which uses a git repo for its data store.
+
+## Features
+
+- Fetch all VCards from a CardDAV server and save to disk locally
+  - Versioning that folder with git is a great idea!
+- Import a folder of VCards into correctly formatted markdown files
+  - Primary target is dendron compatibility, but these are just plain markdown files so any markdown editor / digital garden / second brain system should hopefully be compatible
+- Given a folder of markdown contact files, push each one to a CardDAV server
+  - Currently (v.0.1.0) the deduplication checking is extremely basic
+  - All records are matched by the `uid` field only
