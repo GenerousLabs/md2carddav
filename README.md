@@ -98,6 +98,34 @@ spec, see the `cli/src/shared.config.ts` file for the config schema.
 }
 ```
 
+Here's an example config for a Google server (untested).
+
+```json
+{
+  "carddav": {
+    "url": "https://apidata.googleusercontent.com/carddav/v2/",
+    "credentials": {
+      "tokenUrl": "https://accounts.google.com/o/oauth2/token",
+      "username": "user@gmail.com",
+      "refreshToken": "YOUR_REFRESH_TOKEN_WITH_CALDAV_PERMISSION",
+      "clientId": "YOUR_CLIENT_ID",
+      "clientSecret": "YOUR_CLIENT_SECRET"
+    },
+    "syncAddressBookDisplayName": "addressbook"
+  },
+  "md": {
+    "directory": "/Users/chm/tmp/md2carddav/md/",
+    "fileFilter": ["*.contact.md"],
+    "photosDirectory": "assets"
+  }
+}
+```
+
+For details on how to figure out what all those tokens are and where to get
+them, try the [tsdav GitHub](https://github.com/natelindev/tsdav) and docs. This
+program uses tsdav internally, and those options in the config file are passed
+directly to the `DAVClient`.
+
 ## Limitations
 
 - Currently (v.0.1.0) the code only supports username & password authentication
