@@ -1,6 +1,7 @@
 import { Command, Flags } from "@oclif/core";
 import { exists, readAsync, writeAsync } from "fs-jetpack";
 import * as matter from "gray-matter";
+import { nanoid } from "nanoid/non-secure";
 import { join, resolve } from "path";
 import * as readdirp from "readdirp";
 import { generateContactFromVcard } from "../../services/vcard/vcard.service";
@@ -19,12 +20,19 @@ export default class MdImport extends Command {
       description: "directory of .vcf files",
       required: true,
     }),
-    verbose: Flags.boolean({ char: "v" }),
+    "add-meta": Flags.boolean({
+      char: "m",
+      description: "Add id, created, updated metadata fields to all contacts.",
+    }),
+    verbose: Flags.boolean({
+      char: "v",
+      description: "Output more detail as the program runs.",
+    }),
   };
 
   public async run(): Promise<void> {
     const {
-      flags: { directory, verbose },
+      flags: { directory, "add-meta": addMeta, verbose },
     } = await this.parse(MdImport);
 
     const context = await getContext(this);
@@ -90,10 +98,16 @@ export default class MdImport extends Command {
           (data as Contact).photo = photo;
         }
 
-        const md = matter.stringify(notes || "", data, {
+        const id = nanoid();
+        const now = Date.now();
+        const dataWithMeta = addMeta
+          ? { ...data, id, created: now, updated: now }
+          : data;
+
+        const md = matter.stringify(notes || "", dataWithMeta, {
           skipInvalid: true,
         } as any);
-        this.debug("Created contact #Ub8qXO", data, photoData, md);
+        this.debug("Created contact #Ub8qXO", dataWithMeta, photoData, md);
 
         const mdPath = join(mdDirectory, `${filename}${CONTACT_EXTENSION}`);
         // eslint-disable-next-line no-await-in-loop
