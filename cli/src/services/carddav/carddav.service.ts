@@ -1,9 +1,9 @@
-import { createDAVClient, DAVAccount, DAVCollection, DAVObject } from "tsdav";
+import { DAVAccount, DAVClient, DAVCollection, DAVObject } from "tsdav";
 import { getUidFromVcard } from "../../services/vcard/vcard.service";
 import { CommandContext } from "../../shared.types";
 
 type ClientAndAccount = {
-  client: Awaited<ReturnType<typeof createDAVClient>>;
+  client: DAVClient;
   account: DAVAccount;
 };
 
@@ -17,12 +17,14 @@ export const getClientAndAccount = async (
     },
   } = context;
 
-  const client = await createDAVClient({
+  const client = await new DAVClient({
     serverUrl,
     authMethod,
     credentials,
     defaultAccountType: "carddav",
   });
+
+  client.login();
 
   const account = await client.createAccount({
     account: {
