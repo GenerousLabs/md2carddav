@@ -24,8 +24,6 @@ export const getClientAndAccount = async (
     defaultAccountType: "carddav",
   });
 
-  await client.login();
-
   const account = await client.createAccount({
     account: {
       serverUrl,
