@@ -28,6 +28,11 @@ which uses a git repo for its data store.
 
 - My data, my rules, under my control.
 - Everything in plain text files (optionally tracked in git).
+- Longevity
+  - You will almost certainly be able to read markdown / yaml files in 50 years.
+- Accessibility / auditability
+  - You can use any tools you want (git is a great one) to track changes to
+  plain text files over time.
 - Including contacts inside a digital garden allows for:
   - Notes related to people
   - Tasks in relation to contacts
