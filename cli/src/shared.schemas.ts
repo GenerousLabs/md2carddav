@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const ContactSchema = z.object({
-  uid: z.string().min(3),
+  uid: z.string().min(1),
   // We track full name in the `title` field, and it can't be empty
   title: z
     .string()

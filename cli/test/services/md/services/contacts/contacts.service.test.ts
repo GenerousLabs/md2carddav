@@ -2,7 +2,7 @@ import { expect, test } from "@oclif/test";
 import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
 
 const baseContact = {
-  uid: "123",
+  uid: "1",
   title: "JD",
 };
 
@@ -70,24 +70,24 @@ describe("contacts.service", () => {
 
   test.it("Rejects a record without a title #yOHwJm", () => {
     expectInvalidHelper({
-      uid: "123",
+      uid: "1",
       emails: ["md@domain.tld"],
     });
   });
 
   test.it("Accepts a record with only a title & first name #ooTQiK", () => {
-    expectValidHelper({ uid: "123", title: "Jane", name: { first: "Jane" } });
+    expectValidHelper({ uid: "1", title: "Jane", name: { first: "Jane" } });
   });
 
   test.it("Accepts a record with only a title & last name #Q64LNK", () => {
-    expectValidHelper({ uid: "123", title: "Doe", name: { last: "Doe" } });
+    expectValidHelper({ uid: "1", title: "Doe", name: { last: "Doe" } });
   });
 
   test.it("Accepts a record with only a title & company name #4fH3w3", () => {
-    expectValidHelper({ uid: "123", title: "JD Inc", company: "JD Inc" });
+    expectValidHelper({ uid: "1", title: "JD Inc", company: "JD Inc" });
   });
 
   test.it("Accepts a record with only a title #2TUTOi", () => {
-    expectValidHelper({ uid: "123", title: "Jane Doe" });
+    expectValidHelper({ uid: "1", title: "Jane Doe" });
   });
 });
