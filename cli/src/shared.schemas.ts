@@ -1,50 +1,56 @@
 import { z } from "zod";
 
 export const ContactSchemaBase = z.object({
-  uid: z.string(),
-  company: z.string().optional(),
+  uid: z.string().min(3),
+  company: z.string().min(1).optional(),
   name: z
     .object({
-      full: z.string().optional(),
-      prefix: z.string().or(z.string().array()).optional(),
-      first: z.string().or(z.string().array()).optional(),
-      middle: z.string().or(z.string().array()).optional(),
-      last: z.string().or(z.string().array()).optional(),
-      suffix: z.string().or(z.string().array()).optional(),
+      full: z.string().min(1).optional(),
+      prefix: z.string().min(1).or(z.string().min(1).array()).optional(),
+      first: z.string().min(1).or(z.string().min(1).array()).optional(),
+      middle: z.string().min(1).or(z.string().min(1).array()).optional(),
+      last: z.string().min(1).or(z.string().min(1).array()).optional(),
+      suffix: z.string().min(1).or(z.string().min(1).array()).optional(),
     })
     .optional(),
-  photo: z.string().optional(),
+  photo: z.string().min(3).optional(),
   phones: z
     .array(
       z
-        .object({
-          type: z.string(),
-          phone: z.string(),
-        })
-        .or(z.string())
+        .string()
+        .min(1)
+        .or(
+          z.object({
+            type: z.string().min(1),
+            phone: z.string().min(1),
+          })
+        )
     )
     .optional(),
   emails: z
     .array(
       z
-        .object({
-          type: z.string(),
-          email: z.string(),
-        })
-        .or(z.string())
+        .string()
+        .min(1)
+        .or(
+          z.object({
+            type: z.string().min(1),
+            email: z.string().min(6),
+          })
+        )
     )
     .optional(),
   addresses: z
     .array(
       z
         .object({
-          type: z.string().optional(),
-          line1: z.string().optional(),
-          line2: z.string().optional(),
-          city: z.string().optional(),
-          state: z.string().optional(),
-          postcode: z.string().optional(),
-          country: z.string().optional(),
+          type: z.string().min(1).optional(),
+          line1: z.string().min(1).optional(),
+          line2: z.string().min(1).optional(),
+          city: z.string().min(1).optional(),
+          state: z.string().min(1).optional(),
+          postcode: z.string().min(1).optional(),
+          country: z.string().min(1).optional(),
         })
         .refine((obj) => {
           // Ensure that there is not an empty address
@@ -65,12 +71,15 @@ export const ContactSchemaBase = z.object({
     .optional(),
   urls: z
     .array(
-      z.string().or(
-        z.object({
-          type: z.string(),
-          url: z.string(),
-        })
-      )
+      z
+        .string()
+        .min(1)
+        .or(
+          z.object({
+            type: z.string().min(1),
+            url: z.string().min(1),
+          })
+        )
     )
     .optional(),
   desc: z.string().optional(),
