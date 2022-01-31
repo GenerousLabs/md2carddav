@@ -105,6 +105,12 @@ export const generateVcardFromContact = async (
         break;
       }
 
+      case "nickname": {
+        const { nickname } = contact as Required<Contact>;
+        vcf.addNickname(nickname);
+        break;
+      }
+
       case "photo": {
         const { photo } = contact as Required<Contact>;
         // eslint-disable-next-line no-await-in-loop
@@ -294,7 +300,7 @@ const dataFromVcard = (
 
   const keys = Object.keys(ContactSchema.shape) as ContactField[];
 
-  // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce
+  // eslint-disable-next-line unicorn/prefer-object-from-entries, unicorn/no-array-reduce, complexity
   const data: Partial<Contact> = keys.reduce((data, key) => {
     switch (key) {
       case "uid": {
@@ -319,6 +325,16 @@ const dataFromVcard = (
         const name = { first, last, middle, prefix, suffix };
 
         return { ...data, name };
+      }
+
+      case "nickname": {
+        const prop = vcard.getOne("nickname");
+        if (typeof prop === "undefined") {
+          return data;
+        }
+
+        const nickname = prop.getValue();
+        return { ...data, nickname };
       }
 
       // Photos are handled elsewhere

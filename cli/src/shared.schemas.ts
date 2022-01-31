@@ -17,6 +17,7 @@ export const ContactSchema = z.object({
       suffix: z.string().min(1).or(z.string().min(1).array()).optional(),
     })
     .optional(),
+  nickname: z.string().min(1).optional(),
   photo: z.string().min(3).optional(),
   phones: z
     .array(
