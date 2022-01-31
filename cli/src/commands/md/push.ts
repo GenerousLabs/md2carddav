@@ -30,20 +30,23 @@ export default class MdPush extends Command {
 
   protected errors: string[] = [];
 
-  protected async logError(error: string): Promise<void> {
-    const {
-      flags: { verbose },
-    } = await this.parse(MdPush);
+  protected logError(
+    { verbose }: { quiet: boolean; verbose: boolean },
+    error: string
+  ): void {
     this.errors.push(error);
     if (verbose) {
       this.log(error);
     }
   }
 
-  protected async logErrors(): Promise<void> {
-    const {
-      flags: { quiet },
-    } = await this.parse(MdPush);
+  protected logErrors({
+    quiet,
+    verbose,
+  }: {
+    quiet: boolean;
+    verbose: boolean;
+  }): void {
     if (this.errors.length > 0 && !quiet) {
       this.log(
         `The following ${this.errors.length} errors were encountered. #U1nWXy`
@@ -54,16 +57,20 @@ export default class MdPush extends Command {
     }
   }
 
-  protected async logVerbose(message: string): Promise<void> {
-    const {
-      flags: { quiet, verbose },
-    } = await this.parse(MdPush);
+  protected logVerbose(
+    { quiet, verbose }: { quiet: boolean; verbose: boolean },
+    message: string
+  ): void {
     if (!quiet && verbose) {
       this.log(message);
     }
   }
 
+  protected successes = 0;
+
   public async run(): Promise<void> {
+    const { flags } = await this.parse(MdPush);
+
     const context = await getContext(this);
 
     const {
@@ -79,8 +86,8 @@ export default class MdPush extends Command {
     }
 
     this.debug("Got context #5mjOU9", context);
-
-    await this.logVerbose(
+    this.logVerbose(
+      flags,
       "Connecting to CardDAV server. Can take several minutes. #p5UwNl"
     );
 
@@ -104,12 +111,13 @@ export default class MdPush extends Command {
 
     const { vcards } = addressBook;
 
-    await this.logVerbose(`Found ${vcards.length} VCards. #vGWp2R`);
+    this.logVerbose(flags, `Found ${vcards.length} VCards. #vGWp2R`);
 
     const contacts = await getMdContacts(context);
     this.debug("Got contacts #iI2F1l", contacts.length, contacts);
 
-    await this.logVerbose(
+    this.logVerbose(
+      flags,
       `Found ${contacts.length} markdown contacts. #aofT8L`
     );
 
@@ -117,7 +125,8 @@ export default class MdPush extends Command {
 
     for (const contact of contacts) {
       if ("error" in contact) {
-        await this.logError(
+        this.logError(
+          flags,
           `Failed to parse contact from markdown. #9O7zQK ${contact.file.fullPath}`
         );
         continue;
@@ -143,16 +152,18 @@ export default class MdPush extends Command {
         });
 
         if (!result.ok) {
-          await this.logError(
+          this.logError(
+            flags,
             `Failed to create new VCard #bifKkH UID: ${uid}, Result: ${result}`
           );
           continue;
         }
 
-        await this.logVerbose(
+        this.logVerbose(
+          flags,
           `Successfully created new VCard #r5gYBn UID: ${uid}`
         );
-
+        this.successes++;
         continue;
       }
 
@@ -160,10 +171,11 @@ export default class MdPush extends Command {
 
       if (vcard === existingVcard.vcard.data) {
         this.debug("No changes in vcard, skipping update #B07yJK", uid);
-        await this.logVerbose(
+        this.logVerbose(
+          flags,
           `Skipping VCard which does not require update #ivh1lh UID: ${uid}`
         );
-
+        this.successes++;
         continue;
       }
 
@@ -176,18 +188,25 @@ export default class MdPush extends Command {
       });
 
       if (!result.ok) {
-        await this.logError(
+        this.logError(
+          flags,
           `Failed to update VCard #4Xb28G UID: ${uid}, Result: ${result}`
         );
         continue;
       }
 
       this.debug("Successfully updated vcard #V6VG0x", uid, vcard, result);
-      await this.logVerbose(
+      this.logVerbose(
+        flags,
         `Successfully synced changes to VCard #tp11hW UID: ${uid}`
       );
+      this.successes++;
     }
 
-    await this.logErrors();
+    if (!flags.quiet) {
+      this.log(`Successfully pushed ${this.successes} contacts. #ptqg2v`);
+    }
+
+    this.logErrors(flags);
   }
 }
