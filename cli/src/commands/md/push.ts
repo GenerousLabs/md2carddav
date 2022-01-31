@@ -81,6 +81,16 @@ export default class MdPush extends Command {
     const { client } = clientAndAccount;
 
     for (const contact of contacts) {
+      if ("error" in contact) {
+        // TODO - What do we do with errors like this? How do we allow the
+        // process to continue while also surfacing these issues to the user.
+        this.warn(
+          `Failed to parse contact from markdown. #9O7zQK ${contact.file.fullPath}`
+        );
+        this.debug(contact);
+        continue;
+      }
+
       const {
         contact: { uid },
       } = contact;
