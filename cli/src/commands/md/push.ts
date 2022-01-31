@@ -49,7 +49,7 @@ export default class MdPush extends Command {
   }): void {
     if (this.errors.length > 0 && !quiet) {
       this.log(
-        `The following ${this.errors.length} errors were encountered. #U1nWXy`
+        `#U1nWXy The following ${this.errors.length} errors were encountered.`
       );
       for (const error of this.errors) {
         this.log(error);
@@ -81,14 +81,14 @@ export default class MdPush extends Command {
     } = context;
     if (typeof syncAddressBookDisplayName === "undefined") {
       this.error(
-        "syncAddressBookDisplayName must be set to use this commmand. #NwUjk3"
+        "#NwUjk3 syncAddressBookDisplayName must be set to use this commmand."
       );
     }
 
     this.debug("Got context #5mjOU9", context);
     this.logVerbose(
       flags,
-      "Connecting to CardDAV server. Can take several minutes. #p5UwNl"
+      "#p5UwNl Connecting to CardDAV server. Can take several minutes."
     );
 
     const clientAndAccount = await getClientAndAccount(context);
@@ -105,7 +105,7 @@ export default class MdPush extends Command {
 
     if (typeof addressBook === "undefined") {
       this.error(
-        "Cannot find address book that matches syncAddressBookDisplayName. #ewDxnI"
+        "#ewDxnI Cannot find address book that matches syncAddressBookDisplayName."
       );
     }
 
@@ -118,7 +118,7 @@ export default class MdPush extends Command {
 
     this.logVerbose(
       flags,
-      `Found ${contacts.length} markdown contacts. #aofT8L`
+      `#aofT8L Found ${contacts.length} markdown contacts.`
     );
 
     const { client } = clientAndAccount;
@@ -127,7 +127,7 @@ export default class MdPush extends Command {
       if ("error" in contact) {
         this.logError(
           flags,
-          `Failed to parse contact from markdown. #9O7zQK ${contact.file.fullPath}`
+          `#9O7zQK Failed to parse contact from markdown. ${contact.file.fullPath}`
         );
         continue;
       }
@@ -143,7 +143,7 @@ export default class MdPush extends Command {
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
 
       if (typeof existingVcard === "undefined") {
-        this.debug("Did not find existing vcard to update #HriKMD", uid);
+        this.debug("#HriKMD Did not find existing vcard to update", uid);
 
         const result = await client.createVCard({
           addressBook,
@@ -154,26 +154,26 @@ export default class MdPush extends Command {
         if (!result.ok) {
           this.logError(
             flags,
-            `Failed to create new VCard #bifKkH UID: ${uid}, Result: ${result}`
+            `#bifKkH Failed to create new VCard UID: ${uid}, Result: ${result}`
           );
           continue;
         }
 
         this.logVerbose(
           flags,
-          `Successfully created new VCard #r5gYBn UID: ${uid}`
+          `#r5gYBn Successfully created new VCard  UID: ${uid}`
         );
         this.successes++;
         continue;
       }
 
-      this.debug("Found existing vcard to update #svKzvh", uid);
+      this.debug("#svKzvh Found existing vcard to update", uid);
 
       if (vcard === existingVcard.vcard.data) {
-        this.debug("No changes in vcard, skipping update #B07yJK", uid);
+        this.debug("#B07yJK No changes in vcard, skipping update", uid);
         this.logVerbose(
           flags,
-          `Skipping VCard which does not require update #ivh1lh UID: ${uid}`
+          `#ivh1lh Skipping VCard which does not require update  UID: ${uid}`
         );
         this.successes++;
         continue;
@@ -190,21 +190,21 @@ export default class MdPush extends Command {
       if (!result.ok) {
         this.logError(
           flags,
-          `Failed to update VCard #4Xb28G UID: ${uid}, Result: ${result}`
+          `#4Xb28G Failed to update VCard UID: ${uid}, Result: ${result}`
         );
         continue;
       }
 
-      this.debug("Successfully updated vcard #V6VG0x", uid, vcard, result);
+      this.debug("#V6VG0x Successfully updated vcard", uid, vcard, result);
       this.logVerbose(
         flags,
-        `Successfully synced changes to VCard #tp11hW UID: ${uid}`
+        `#tp11h Successfully synced changes to VCard UID: ${uid}`
       );
       this.successes++;
     }
 
     if (!flags.quiet) {
-      this.log(`Successfully pushed ${this.successes} contacts. #ptqg2v`);
+      this.log(`#ptqg2v Successfully pushed ${this.successes} contacts.`);
     }
 
     this.logErrors(flags);
