@@ -10,7 +10,7 @@ export const getFileContents = async (
     return {
       success: false,
       error: "File is empty #y3y4uK",
-      code: "kttFlt",
+      code: "file.empty",
     };
   }
 
