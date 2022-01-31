@@ -7,6 +7,12 @@
   ],
   "plugins": ["only-warn"],
   "rules": {
+    "node/no-extraneous-import": [
+      "error",
+      {
+        "allowModules": ["nanoid"]
+      }
+    ],
     "unicorn/prefer-node-protocol": 0,
     "unicorn/import-style": 0
   }
