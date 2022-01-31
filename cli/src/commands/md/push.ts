@@ -134,7 +134,9 @@ export default class MdPush extends Command {
 
       const {
         contact: { uid },
+        file: { basename, fullPath },
       } = contact;
+
       const vcard = await generateVcardFromContact(
         mdDirectory,
         contact.contact
@@ -143,7 +145,7 @@ export default class MdPush extends Command {
       const existingVcard = vcards.find((vcard) => vcard.uid === uid);
 
       if (typeof existingVcard === "undefined") {
-        this.debug("#HriKMD Did not find existing vcard to update", uid);
+        this.debug("#HriKMD Did not find existing vcard to update", fullPath);
 
         const result = await client.createVCard({
           addressBook,
@@ -154,26 +156,26 @@ export default class MdPush extends Command {
         if (!result.ok) {
           this.logError(
             flags,
-            `#bifKkH Failed to create new VCard UID: ${uid}, Result: ${result}`
+            `#bifKkH Failed to create new VCard ${basename}, Result: ${result}`
           );
           continue;
         }
 
         this.logVerbose(
           flags,
-          `#r5gYBn Successfully created new VCard  UID: ${uid}`
+          `#r5gYBn Successfully created new VCard ${basename}`
         );
         this.successes++;
         continue;
       }
 
-      this.debug("#svKzvh Found existing vcard to update", uid);
+      this.debug("#svKzvh Found existing vcard to update", fullPath);
 
       if (vcard === existingVcard.vcard.data) {
-        this.debug("#B07yJK No changes in vcard, skipping update", uid);
+        this.debug("#B07yJK No changes in vcard, skipping update", fullPath);
         this.logVerbose(
           flags,
-          `#ivh1lh Skipping VCard which does not require update  UID: ${uid}`
+          `#ivh1lh Skipping VCard which does not require update ${basename}`
         );
         this.successes++;
         continue;
@@ -190,15 +192,15 @@ export default class MdPush extends Command {
       if (!result.ok) {
         this.logError(
           flags,
-          `#4Xb28G Failed to update VCard UID: ${uid}, Result: ${result}`
+          `#4Xb28G Failed to update VCard ${basename}, Result: ${result}`
         );
         continue;
       }
 
-      this.debug("#V6VG0x Successfully updated vcard", uid, vcard, result);
+      this.debug("#V6VG0x Successfully updated vcard", fullPath, vcard, result);
       this.logVerbose(
         flags,
-        `#tp11h Successfully synced changes to VCard UID: ${uid}`
+        `#tp11h Successfully synced changes to VCard ${basename}`
       );
       this.successes++;
     }
