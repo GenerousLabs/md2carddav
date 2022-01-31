@@ -11,9 +11,9 @@ import { getContext } from "../../shared.utils";
 export default class MdPush extends Command {
   static description =
     `Push contacts from markdown to CardDAV\n` +
-    `Load all contacts from markdown, load all contacts from CardDAV, find ` +
-    `any which need created or update, and then create or update them on ` +
-    `configured the CardDAV server`;
+    `Load all contacts from markdown, load all contacts from CardDAV. Find ` +
+    `any contacts which need created or updated on the CardDAV server, and ` +
+    `then create or update them.`;
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
