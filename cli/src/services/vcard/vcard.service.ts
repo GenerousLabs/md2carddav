@@ -62,8 +62,20 @@ export const generateVcardFromContact = async (
       }
 
       case "title": {
-        const { title } = contact;
+        const { title, name } = contact;
         vcf.setFullName(title);
+
+        // If a full name is like `Jane Doe` and there is no names field, auto
+        // guess the first and last names
+        if (typeof name === "undefined") {
+          const names = title.split(" ");
+          if (names.length === 2) {
+            const [first, last] = names;
+            vcf.addFirstName(first);
+            vcf.addLastName(last);
+          }
+        }
+
         break;
       }
 

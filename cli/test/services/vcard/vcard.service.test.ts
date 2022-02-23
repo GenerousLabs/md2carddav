@@ -10,7 +10,7 @@ describe("vcard.service", () => {
           title: "Jane Doe",
         })
       ).to.equal(
-        `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nUID:1\r\nEND:VCARD`
+        `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nN:Doe;Jane;;;\r\nUID:1\r\nEND:VCARD`
       );
     });
 
@@ -42,7 +42,7 @@ describe("vcard.service", () => {
             phones: [{ type: "mobile", phone: "+1 123 12345" }],
           })
         ).to.equal(
-          `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nTEL;TYPE=mobile:+1 123 12345\r\nUID:1\r\nEND:VCARD`
+          `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nN:Doe;Jane;;;\r\nTEL;TYPE=mobile:+1 123 12345\r\nUID:1\r\nEND:VCARD`
         );
       }
     );
@@ -57,7 +57,7 @@ describe("vcard.service", () => {
             phones: ["+1 123 12345"],
           })
         ).to.equal(
-          `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nTEL:+1 123 12345\r\nUID:1\r\nEND:VCARD`
+          `BEGIN:VCARD\r\nVERSION:4.0\r\nFN:Jane Doe\r\nN:Doe;Jane;;;\r\nTEL:+1 123 12345\r\nUID:1\r\nEND:VCARD`
         );
       }
     );
