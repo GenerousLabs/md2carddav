@@ -40,13 +40,7 @@ export default class MdPush extends Command {
     }
   }
 
-  protected logErrors({
-    quiet,
-    verbose,
-  }: {
-    quiet: boolean;
-    verbose: boolean;
-  }): void {
+  protected logErrors({ quiet }: { quiet: boolean }): void {
     if (this.errors.length > 0 && !quiet) {
       this.log(
         `#U1nWXy The following ${this.errors.length} errors were encountered.`
