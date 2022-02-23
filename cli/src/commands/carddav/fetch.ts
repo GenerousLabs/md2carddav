@@ -31,20 +31,29 @@ NOTE: This command does not remove any existing files, it is recommended to star
       description: "path to save VCF files",
       required: true,
     }),
+    verbose: Flags.boolean({
+      char: "v",
+      description: "Output more information about each step in the process.",
+    }),
   };
 
   static args = [];
 
   public async run(): Promise<void> {
     const {
-      flags: { directory },
+      flags: { directory, verbose },
     } = await this.parse(CarddavFetch);
 
     const context = await getContext(this);
+    this.debug(`#VrBonm Got context ${JSON.stringify(context)}`);
 
     const clientAndAccount = await getClientAndAccount(context);
 
     const addressBooks = await getVCards(context, clientAndAccount);
+
+    if (verbose) {
+      this.log(`#1mV657 Got ${addressBooks.length} address books.`);
+    }
 
     for (const addressBook of addressBooks) {
       const { vcards, displayName } = addressBook;
