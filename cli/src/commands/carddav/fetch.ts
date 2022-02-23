@@ -81,6 +81,12 @@ NOTE: This command does not remove any existing files, it is recommended to star
         // eslint-disable-next-line no-await-in-loop
         await writeAsync(writePath, card.vcard.data);
       }
+
+      if (verbose) {
+        this.log(
+          `#58HoPP Fetched ${vcards.length} VCards for address book named "${displayName}"`
+        );
+      }
     }
 
     this.debug("Got addressBooks with vcards #VHvQJe");
