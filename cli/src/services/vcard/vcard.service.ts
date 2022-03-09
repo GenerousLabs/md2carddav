@@ -496,39 +496,50 @@ const getNote = (vcard: Vcfer) => {
 
 export const generateContactFromVcard = (
   context: CommandContext,
-  vcf: string
+  vcf: string,
+  // This is the default behaviour during import
+  returnNotesSeparately = true
 ): Returns<{
-  data: Omit<Contact, "photo" | "notes">;
+  data: Omit<Contact, "photo">;
   notes?: string;
   photo?: Photo;
   filenames: string[];
 }> => {
-  const vcard = new Vcfer(vcf);
-
-  const uid = vcard.getOne("uid")?.getValue();
-
-  if (typeof uid === "undefined") {
-    return {
-      success: false,
-      error: "Found VCF without UID. #ChLMwK",
-      code: "vcard.uidnotstring",
-    };
-  }
-
-  const data = dataFromVcard(context, vcard, uid);
-
-  const filenames = _getFilenames(data);
-
-  const photo = getPhotoFromVcfer(vcard);
-
-  const notes = getNote(vcard);
-
   try {
-    return { success: true, result: { data, notes, photo, filenames } };
+    const vcard = new Vcfer(vcf);
+
+    const uid = vcard.getOne("uid")?.getValue();
+
+    if (typeof uid === "undefined") {
+      return {
+        success: false,
+        error: "Found VCF without UID. #ChLMwK",
+        code: "vcard.uidnotstring",
+      };
+    }
+
+    const data = dataFromVcard(context, vcard, uid);
+
+    const filenames = _getFilenames(data);
+
+    const photo = getPhotoFromVcfer(vcard);
+
+    const notes = getNote(vcard);
+
+    if (returnNotesSeparately) {
+      return { success: true, result: { data, notes, photo, filenames } };
+    }
+
+    const desc = typeof notes === "undefined" ? {} : { desc: notes };
+
+    return {
+      success: true,
+      result: { data: { ...data, ...desc }, photo, filenames },
+    };
   } catch (error) {
     return {
       success: false,
-      error: (error as any).message,
+      error: error instanceof Error ? error.message : JSON.stringify(error),
       code: "vcard.failed",
     };
   }
