@@ -3,7 +3,7 @@ import { VCard } from "@covve/easy-vcard";
 import * as isEqual from "fast-deep-equal";
 import * as clean from "obj-clean";
 import slugify from "slugify";
-import Vcfer from "vcfer";
+import Vcfer, { JCardProperty } from "vcfer";
 import { ContactSchema } from "../../shared.schemas";
 import {
   CommandContext,
@@ -551,12 +551,16 @@ export const generateContactFromVcard = (
  *
  * - the photo gets line wrapped at n characters
  * - Ours are VCard 4 the remote can be VCard 3
+ *
+ * @argument context {CommandContext}
+ * @returns {Boolean} If the two vcards are equivalent
  */
-
 export const areVCardsEquivalent = (
-  { debug }: CommandContext,
+  context: CommandContext,
   { first, second }: { first: string; second: string }
 ): boolean => {
+  const { debug } = context;
+
   // Will this result in an update?
   const firstVcfer = new Vcfer(first);
   const secondVcfer = new Vcfer(second);
@@ -572,10 +576,12 @@ export const areVCardsEquivalent = (
   const [secondVersion, ...secondRest] = secondData;
 
   if (firstVersion[0] !== "version" || secondVersion[0] !== "version") {
+    debug("#8kB8YG Failed to find versions as first entry");
     return false;
   }
 
   if (isEqual(firstRest, secondRest)) {
+    debug(`#4XT2hN vcards are equal (excluding version)`);
     return true;
   }
 
