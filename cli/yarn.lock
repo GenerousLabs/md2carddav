@@ -217,10 +217,10 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@covve/easy-vcard@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@covve/easy-vcard/-/easy-vcard-1.0.0.tgz#697e32a9ca2fc82b4a7ee9ed6c8d8c68727dbdd2"
-  integrity sha512-rFDqJ55lpCT7oeiIa4PwAcWcaPgW6RhZaWWLpQUV6jbG8hkJkPRET0jIUv8UGXlltueUtXNfOyRUM3aEID+3bg==
+"@covve/easy-vcard@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@covve/easy-vcard/-/easy-vcard-1.1.0.tgz#cf2356a7d4b416eac36404d8f9597cd85270bb0f"
+  integrity sha512-vS98D2OCwldmamK8AEN5m75Ud5Ed44wGYA97nlqNk4vWOKtHqwdQiOp3XlhQ5LXXApF1wUSIigWxeP0ydVkA9w==
   dependencies:
     lodash.clonedeep "4.5.0"
     lodash.isempty "4.4.0"
