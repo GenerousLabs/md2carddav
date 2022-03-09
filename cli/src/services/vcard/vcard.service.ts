@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-array-for-each */
 import { VCard } from "@covve/easy-vcard";
+import * as isEqual from "fast-deep-equal";
 import * as clean from "obj-clean";
 import slugify from "slugify";
 import Vcfer from "vcfer";
@@ -543,4 +544,42 @@ export const generateContactFromVcard = (
       code: "vcard.failed",
     };
   }
+};
+
+/**
+ * Things that can differ between our VCard and the remote
+ *
+ * - the photo gets line wrapped at n characters
+ * - Ours are VCard 4 the remote can be VCard 3
+ */
+
+export const areVCardsEquivalent = (
+  { debug }: CommandContext,
+  { first, second }: { first: string; second: string }
+): boolean => {
+  // Will this result in an update?
+  const firstVcfer = new Vcfer(first);
+  const secondVcfer = new Vcfer(second);
+
+  const firstJCard = firstVcfer.toJCard();
+  const secondJCard = secondVcfer.toJCard();
+
+  const [, firstData] = firstJCard;
+  const [, secondData] = secondJCard;
+
+  // Compare the 2 arrays, ignoring `version`
+  const [firstVersion, ...firstRest] = firstData;
+  const [secondVersion, ...secondRest] = secondData;
+
+  if (firstVersion[0] !== "version" || secondVersion[0] !== "version") {
+    return false;
+  }
+
+  if (isEqual(firstRest, secondRest)) {
+    return true;
+  }
+
+  debug("#KedlAY areVCardsEquivalent false", { first, second });
+
+  return false;
 };

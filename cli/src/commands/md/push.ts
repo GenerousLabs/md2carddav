@@ -5,7 +5,10 @@ import {
   getVCards,
 } from "../../services/carddav/carddav.service";
 import { getMdContacts } from "../../services/md/md.service";
-import { generateVcardFromContact } from "../../services/vcard/vcard.service";
+import {
+  areVCardsEquivalent,
+  generateVcardFromContact,
+} from "../../services/vcard/vcard.service";
 import { getContext } from "../../shared.utils";
 
 export default class MdPush extends Command {
@@ -165,7 +168,12 @@ export default class MdPush extends Command {
 
       this.debug("#svKzvh Found existing vcard to update", fullPath);
 
-      if (vcard === existingVcard.vcard.data) {
+      if (
+        areVCardsEquivalent(context, {
+          first: vcard,
+          second: existingVcard.vcard.data,
+        })
+      ) {
         this.debug("#B07yJK No changes in vcard, skipping update", fullPath);
         this.logVerbose(
           flags,
