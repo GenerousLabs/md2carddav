@@ -2,6 +2,9 @@ import { Command, Flags } from "@oclif/core";
 import { getClientAndAccount } from "../../services/carddav/carddav.service";
 import { getContext } from "../../shared.utils";
 
+// TODO - Could add a `--verbose` flag which logs each contact as its deleted
+// and the count of contacts to be deleted at the start
+
 export default class CarddavWipe extends Command {
   static description = `delete every contact in an address book
   This command is extremely destructive, it will delete every contact in a given address book. It is highly recommended to run fetch first and take a backup.
