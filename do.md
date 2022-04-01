@@ -6,3 +6,5 @@
 - [ ] More output by default
   - List any records with a change
   - Maybe add a `--quiet` flag to skip all output except errors
+- [ ] Log commit hash at last push
+  - This should add support for seeing what has changed
