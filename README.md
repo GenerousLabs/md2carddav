@@ -57,6 +57,49 @@ which uses a git repo for its data store.
 
 ## Getting started
 
+### Contacts
+
+You'll need some contacts in markdown + frontmatter. See the schema at
+`cli/src/shared.schemas.ts`.
+
+A limited example is:
+
+```markdown
+---
+id: randomString
+uid: randomString
+title: Full Name
+name:
+  first: Full
+  last: Name
+nickname: Nicki
+photo: relative/path/to/photo.jpg
+phones:
+  - type: cell
+    phone: +1 234 567 8901
+emails:
+  - fullname@domain.tld
+urls:
+  - type: home
+    url: https://domain.tld
+addresses:
+  - type: home
+    line1: 1 Street Name
+    line2: c/o Another Name
+    city: Somewhere
+    postcode: 12345
+    country: A Country
+desc: A note about the contact
+```
+
+It should be pretty self explanatory except for the `title` and `desc` fields
+which map to the "Full name" and "Notes" fields respectively on the CardDAV
+side. This is for [dendron](https://dendron.so) et al compatibility. The
+`phones`, `emails`, and `urls` all support either a `type` and field map
+(object) or a single string.
+
+### Code
+
 Currently (v0.1.0) there's no releases (yet). To use this, you'll need to clone
 this repo, install dependencies, and then build the cli.
 
@@ -75,7 +118,7 @@ Instructions
 You'll need to create a config file called `.md2carddavrc.json` in the current
 working directory where ou run the program.
 
-## Config
+### Config
 
 Here's an example config file (as of v0.1.0). But for the most up to date config
 spec, see the `cli/src/shared.config.ts` file for the config schema.
