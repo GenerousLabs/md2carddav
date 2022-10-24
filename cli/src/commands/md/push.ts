@@ -124,7 +124,8 @@ export default class MdPush extends Command {
       if ("error" in contact) {
         this.logError(
           flags,
-          `#9O7zQK Failed to parse contact from markdown. ${contact.file.fullPath}`
+          `#9O7zQK Failed to parse contact from markdown. ${contact.file.fullPath}` +
+            `  Error was: ${contact.error}`
         );
         continue;
       }
