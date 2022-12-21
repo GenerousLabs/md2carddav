@@ -60,6 +60,10 @@ export const getVCards = async (
       });
       const expandedVcards = vcards.map((vcard) => {
         const uidResult = getUidFromVcard(vcard.data);
+        if (!uidResult.success) {
+          debug(`#go9Ett Failed to find UID for vcard`, uidResult, vcard);
+        }
+
         return {
           vcard,
           uid: uidResult.success ? uidResult.result : undefined,
@@ -69,7 +73,11 @@ export const getVCards = async (
     })
   );
 
-  debug("Got vcards #DN3ahi", addressBooksWithVcards);
+  debug(
+    "Got vcards #DN3ahi",
+    addressBooksWithVcards,
+    addressBooksWithVcards[0].vcards
+  );
 
   return addressBooksWithVcards;
 };
