@@ -28,7 +28,7 @@ export const getUidFromVcard = (input: string): Returns<string> => {
   }
 
   const lines = input.split("\n");
-  const uidLine = lines.find((line) => line.startsWith("UID:"));
+  const uidLine = lines.find((line) => line.startsWith("UID"));
 
   if (typeof uidLine === "undefined") {
     return {
@@ -38,11 +38,32 @@ export const getUidFromVcard = (input: string): Returns<string> => {
     };
   }
 
-  const uid = uidLine.slice(4).trim();
+  // The UID line should be like:
+  // `uid:XXX`
+  if (uidLine.startsWith("UID:")) {
+    const uid = uidLine.slice(4).trim();
+
+    return {
+      success: true,
+      result: uid,
+    };
+  }
+
+  // The UID line should be like:
+  // `UID;VALUE=uri:XXX`
+  if (uidLine.startsWith("UID;VALUE=uri:")) {
+    const uid = uidLine.slice(14).trim();
+
+    return {
+      success: true,
+      result: uid,
+    };
+  }
 
   return {
-    success: true,
-    result: uid,
+    success: false,
+    error: "Could not parse UID #dE2zIq",
+    code: "vcard.invaliduid",
   };
 };
 
