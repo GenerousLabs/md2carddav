@@ -64,6 +64,9 @@ export default class MdPush extends Command {
   }
 
   protected successes = 0;
+  protected contactsSkipped = 0;
+  protected contactsCreated = 0;
+  protected contactsUpdated = 0;
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(MdPush);
@@ -164,6 +167,7 @@ export default class MdPush extends Command {
           `#r5gYBn Successfully created new VCard ${basename}`
         );
         this.successes++;
+        this.contactsUpdated++;
         continue;
       }
 
@@ -181,6 +185,7 @@ export default class MdPush extends Command {
           `#ivh1lh Skipping VCard which does not require update ${basename}`
         );
         this.successes++;
+        this.contactsSkipped++;
         continue;
       }
 
@@ -206,10 +211,13 @@ export default class MdPush extends Command {
         `#tp11h Successfully synced changes to VCard ${basename}`
       );
       this.successes++;
+      this.contactsCreated++;
     }
 
     if (!flags.quiet) {
-      this.log(`#ptqg2v Successfully pushed ${this.successes} contacts.`);
+      this.log(
+        `#ptqg2v Successfully pushed ${this.successes} contacts. Created ${this.contactsCreated}, updated ${this.contactsUpdated}, and skipped ${this.contactsSkipped}.`
+      );
     }
 
     this.logErrors(flags);
