@@ -634,10 +634,7 @@ export const _arePhotosEquivalent = (
   return false;
 };
 
-const SKIP_PROPS: readonly string[] = ["uid", "photo"] as const;
-export const _filterProps = (card: JCardProperty[]): JCardProperty[] => {
-  return card.filter(([propName]) => !SKIP_PROPS.includes(propName));
-};
+const SKIP_PROPS: readonly string[] = ["version", "uid", "photo"] as const;
 
 /**
  * Things that can differ between our VCard and the remote
@@ -666,34 +663,40 @@ export const areVCardsEquivalent = (
     return false;
   }
 
-  const firstJCard = firstVcfer.toJCard();
-  const secondJCard = secondVcfer.toJCard();
+  for (const [propName] of firstVcfer.props) {
+    if (SKIP_PROPS.includes(propName)) {
+      continue;
+    }
 
-  const [, firstData] = firstJCard;
-  const [, secondData] = secondJCard;
+    const firstProps = firstVcfer.get(propName);
+    const secondProps = secondVcfer.get(propName);
 
-  // Compare the 2 arrays, ignoring `version`
-  const [firstVersion, ...firstRest] = firstData;
-  const [secondVersion, ...secondRest] = secondData;
+    for (const [index, firstProp] of firstProps.entries()) {
+      const secondProp = secondProps[index];
 
-  if (firstVersion[0] !== "version" || secondVersion[0] !== "version") {
-    debug("#8kB8YG Failed to find versions as first entry");
-    return false;
+      if (firstProp.getValue() !== secondProp.getValue()) {
+        debug("#CjtlTq found differing props comparing vcards", {
+          first,
+          second,
+          firstPropValue: firstProp.getValue(),
+          secondPropValue: secondProp.getValue(),
+        });
+        return false;
+      }
+
+      if (!isEqual(firstProp.params.type, secondProp.params.type)) {
+        debug("#uNjJCW found differing params comparing vcards", {
+          first,
+          second,
+          firstProp,
+          secondProp,
+        });
+        return false;
+      }
+    }
   }
 
-  // Extract UID lines from both as they can have different formats
-  const firstPropsToCompare = _filterProps(firstRest);
-  const secondPropsToCompare = _filterProps(secondRest);
+  debug(`#4XT2hN vcards are equivalent`);
 
-  if (isEqual(firstPropsToCompare, secondPropsToCompare)) {
-    debug(`#4XT2hN vcards are equal (excluding version)`);
-    return true;
-  }
-
-  debug("#KedlAY areVCardsEquivalent false", {
-    first,
-    second,
-  });
-
-  return false;
+  return true;
 };
