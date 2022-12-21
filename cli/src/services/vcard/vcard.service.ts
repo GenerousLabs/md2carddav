@@ -596,7 +596,7 @@ export const _areUidsEquivalent = (
   return false;
 };
 
-const JPEG_LEADER = "data:image/jpeg," as const;
+const JPEG_LEADER = "data:image/jpeg\\," as const;
 export const _stripJpegLeader = (input: string): string =>
   input.startsWith(JPEG_LEADER) ? input.slice(JPEG_LEADER.length) : input;
 

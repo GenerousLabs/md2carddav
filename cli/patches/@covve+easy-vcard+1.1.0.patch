@@ -1,0 +1,15 @@
+diff --git a/node_modules/@covve/easy-vcard/dist/formatter/formatter.js b/node_modules/@covve/easy-vcard/dist/formatter/formatter.js
+index a736f53..6eb7e97 100644
+--- a/node_modules/@covve/easy-vcard/dist/formatter/formatter.js
++++ b/node_modules/@covve/easy-vcard/dist/formatter/formatter.js
+@@ -178,8 +178,8 @@ class Formatter {
+         if (!s)
+             return '';
+         const escapedBackslashes = s.split('\\').join('\\\\');
+-        const escapedCommas = escapedBackslashes.split(',').join('\,');
+-        const escapedSemicolons = escapedCommas.split(';').join('\;');
++        const escapedCommas = escapedBackslashes.split(',').join('\\\,');
++        const escapedSemicolons = escapedCommas.split(';').join('\\\;');
+         const escapedNewlines = escapedSemicolons.split('\n').join('\\n');
+         return escapedNewlines;
+     }
