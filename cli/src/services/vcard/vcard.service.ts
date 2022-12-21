@@ -1,9 +1,11 @@
 /* eslint-disable unicorn/no-array-for-each */
 import { VCard } from "@covve/easy-vcard";
+import { debug } from "console";
 import * as isEqual from "fast-deep-equal";
 import * as clean from "obj-clean";
 import slugify from "slugify";
-import Vcfer, { JCardProperty } from "vcfer";
+import Vcfer, { JCard, JCardProperty } from "vcfer";
+import { TypeOf } from "zod";
 import { ContactSchema } from "../../shared.schemas";
 import {
   CommandContext,
@@ -567,6 +569,76 @@ export const generateContactFromVcard = (
   }
 };
 
+export const _areUidsEquivalent = (
+  context: CommandContext,
+  { firstVcfer, secondVcfer }: { firstVcfer: Vcfer; secondVcfer: Vcfer }
+): boolean => {
+  const { debug } = context;
+
+  const firstUid = firstVcfer.getOne("uid");
+  const secondUid = secondVcfer.getOne("uid");
+
+  if (typeof firstUid === "undefined" || typeof secondUid === "undefined") {
+    debug("#BMFiNA Comparing VCArds but at least 1 is missing a UID");
+    return false;
+  }
+
+  if (firstUid.getValue() === secondUid.getValue()) {
+    return true;
+  }
+
+  debug("#Huh1KE UIDs did not match", {
+    firstVcfer,
+    secondVcfer,
+    firstUid,
+    secondUid,
+  });
+  return false;
+};
+
+const JPEG_LEADER = "data:image/jpeg," as const;
+export const _stripJpegLeader = (input: string): string =>
+  input.startsWith(JPEG_LEADER) ? input.slice(JPEG_LEADER.length) : input;
+
+export const _arePhotosEquivalent = (
+  context: CommandContext,
+  { firstVcfer, secondVcfer }: { firstVcfer: Vcfer; secondVcfer: Vcfer }
+): boolean => {
+  const { debug } = context;
+
+  const firstPhoto = firstVcfer.getOne("photo");
+  const secondPhoto = secondVcfer.getOne("photo");
+
+  if (typeof firstPhoto === "undefined" && typeof secondPhoto === "undefined") {
+    return true;
+  }
+
+  if (typeof firstPhoto === "undefined" || typeof secondPhoto === "undefined") {
+    return false;
+  }
+
+  const firstPhotoValue = firstPhoto.getValue();
+  const secondPhotoValue = secondPhoto.getValue();
+
+  if (
+    _stripJpegLeader(firstPhotoValue) === _stripJpegLeader(secondPhotoValue)
+  ) {
+    return true;
+  }
+
+  debug("#wWrW6B photos are not the same", {
+    firstPhotoValue,
+    secondPhotoValue,
+  });
+
+  return false;
+};
+
+const SKIP_PROPS: readonly string[] = ["uid", "photo"] as const;
+export const _filterProps = (card: JCardProperty[]): JCardProperty[] => {
+  return card.filter(([propName]) => !SKIP_PROPS.includes(propName));
+};
+
 /**
  * Things that can differ between our VCard and the remote
  *
@@ -586,16 +658,11 @@ export const areVCardsEquivalent = (
   const firstVcfer = new Vcfer(first);
   const secondVcfer = new Vcfer(second);
 
-  const firstUid = firstVcfer.getOne("uid");
-  const secondUid = secondVcfer.getOne("uid");
-
-  if (typeof firstUid === "undefined" || typeof secondUid === "undefined") {
-    debug("#BMFiNA Comparing VCArds but at least 1 is missing a UID");
+  if (!_areUidsEquivalent(context, { firstVcfer, secondVcfer })) {
     return false;
   }
 
-  if (firstUid.getValue() !== secondUid.getValue()) {
-    debug("#9LFN1q uid", firstUid, secondUid);
+  if (!_arePhotosEquivalent(context, { firstVcfer, secondVcfer })) {
     return false;
   }
 
@@ -615,14 +682,10 @@ export const areVCardsEquivalent = (
   }
 
   // Extract UID lines from both as they can have different formats
-  const firstWithoutVersionAndUid = firstRest.filter(
-    (line) => line[0] !== "uid"
-  );
-  const secondWithoutVersionAndUid = secondRest.filter(
-    (line) => line[0] !== "uid"
-  );
+  const firstPropsToCompare = _filterProps(firstRest);
+  const secondPropsToCompare = _filterProps(secondRest);
 
-  if (isEqual(firstWithoutVersionAndUid, secondWithoutVersionAndUid)) {
+  if (isEqual(firstPropsToCompare, secondPropsToCompare)) {
     debug(`#4XT2hN vcards are equal (excluding version)`);
     return true;
   }
