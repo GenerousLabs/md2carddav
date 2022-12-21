@@ -586,6 +586,19 @@ export const areVCardsEquivalent = (
   const firstVcfer = new Vcfer(first);
   const secondVcfer = new Vcfer(second);
 
+  const firstUid = firstVcfer.getOne("uid");
+  const secondUid = secondVcfer.getOne("uid");
+
+  if (typeof firstUid === "undefined" || typeof secondUid === "undefined") {
+    debug("#BMFiNA Comparing VCArds but at least 1 is missing a UID");
+    return false;
+  }
+
+  if (firstUid.getValue() !== secondUid.getValue()) {
+    debug("#9LFN1q uid", firstUid, secondUid);
+    return false;
+  }
+
   const firstJCard = firstVcfer.toJCard();
   const secondJCard = secondVcfer.toJCard();
 
@@ -601,12 +614,23 @@ export const areVCardsEquivalent = (
     return false;
   }
 
-  if (isEqual(firstRest, secondRest)) {
+  // Extract UID lines from both as they can have different formats
+  const firstWithoutVersionAndUid = firstRest.filter(
+    (line) => line[0] !== "uid"
+  );
+  const secondWithoutVersionAndUid = secondRest.filter(
+    (line) => line[0] !== "uid"
+  );
+
+  if (isEqual(firstWithoutVersionAndUid, secondWithoutVersionAndUid)) {
     debug(`#4XT2hN vcards are equal (excluding version)`);
     return true;
   }
 
-  debug("#KedlAY areVCardsEquivalent false", { first, second });
+  debug("#KedlAY areVCardsEquivalent false", {
+    first,
+    second,
+  });
 
   return false;
 };
