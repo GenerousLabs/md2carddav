@@ -675,7 +675,7 @@ export const areVCardsEquivalent = (
       const secondProp = secondProps[index];
 
       if (firstProp.getValue() !== secondProp.getValue()) {
-        debug("#CjtlTq found differing props comparing vcards", {
+        debug("#CjtlTq found differing props when comparing vcards", {
           first,
           second,
           firstPropValue: firstProp.getValue(),
