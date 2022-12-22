@@ -663,13 +663,27 @@ export const areVCardsEquivalent = (
     return false;
   }
 
-  for (const [propName] of firstVcfer.props) {
+  const propNames = [
+    ...firstVcfer.props.keys(),
+    ...secondVcfer.props.keys(),
+  ].filter((value, index, self) => self.indexOf(value) === index);
+
+  for (const propName of propNames) {
     if (SKIP_PROPS.includes(propName)) {
       continue;
     }
 
     const firstProps = firstVcfer.get(propName);
     const secondProps = secondVcfer.get(propName);
+
+    if (firstProps.length === 0 && secondProps.length === 0) {
+      continue;
+    }
+
+    if (firstProps.length !== secondProps.length) {
+      debug("#Qp96DP found different prop counts when comparing vcards");
+      return false;
+    }
 
     for (const [index, firstProp] of firstProps.entries()) {
       const secondProp = secondProps[index];
