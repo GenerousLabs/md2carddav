@@ -1,11 +1,9 @@
 /* eslint-disable unicorn/no-array-for-each */
 import { VCard } from "@covve/easy-vcard";
-import { debug } from "console";
 import * as isEqual from "fast-deep-equal";
 import * as clean from "obj-clean";
 import slugify from "slugify";
-import Vcfer, { JCard, JCardProperty } from "vcfer";
-import { TypeOf } from "zod";
+import Vcfer from "vcfer";
 import { ContactSchema } from "../../shared.schemas";
 import {
   CommandContext,
