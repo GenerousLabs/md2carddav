@@ -167,7 +167,7 @@ export default class MdPush extends Command {
           `#r5gYBn Successfully created new VCard ${basename}`
         );
         this.successes++;
-        this.contactsUpdated++;
+        this.contactsCreated++;
         continue;
       }
 
@@ -211,7 +211,7 @@ export default class MdPush extends Command {
         `#tp11h Successfully synced changes to VCard ${basename}`
       );
       this.successes++;
-      this.contactsCreated++;
+      this.contactsUpdated++;
     }
 
     if (!flags.quiet) {
