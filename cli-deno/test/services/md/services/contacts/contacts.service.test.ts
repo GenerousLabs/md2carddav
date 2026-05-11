@@ -1,5 +1,6 @@
-import { expect, test } from "@oclif/test";
-import { getContactFromYamlFrontmatterData } from "../../../../../src/services/md/services/contacts/contacts.service";
+import { describe } from "node:test";
+import { expect, test } from "../../../../helpers/oclif-test-compat.ts";
+import { getContactFromYamlFrontmatterData } from "@subject/services/md/services/contacts/contacts.service.ts";
 
 const baseContact = {
   uid: "1",

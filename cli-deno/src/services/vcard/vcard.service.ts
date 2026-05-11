@@ -13,9 +13,9 @@ import {
   Photo,
 } from "./services/photos/photos.service.ts";
 
-// vcfer exports a class as CJS default; cast to usable constructor
+// vcfer's CJS exports have the class at .default (Deno npm interop)
 // deno-lint-ignore no-explicit-any
-const Vcfer = VcferRaw as any as { new(input?: string): VcferInst };
+const Vcfer = (VcferRaw as any).default as { new(input?: string): VcferInst };
 
 export const getUidFromVcard = (input: string): Returns<string> => {
   if (typeof input !== "string") {

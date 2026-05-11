@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ContactSchema } from '@subject/shared.schemas.ts';
+import { ContactSchema } from '@subject/shared/schemas.ts';
 
 describe('ContactSchema', () => {
   it('parses valid minimal contact', () => {

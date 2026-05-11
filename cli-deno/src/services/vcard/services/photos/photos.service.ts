@@ -3,9 +3,9 @@ import { join } from "@std/path";
 import VcferRaw from "npm:vcfer";
 import type { VcferInst } from "../../vcfer-types.ts";
 
-// vcfer exports a class as CJS default; cast to usable constructor
+// vcfer's CJS exports have the class at .default (Deno npm interop)
 // deno-lint-ignore no-explicit-any
-const Vcfer = VcferRaw as any as { new(input?: string): VcferInst };
+const Vcfer = (VcferRaw as any).default as { new(input?: string): VcferInst };
 
 const getMediaTypeFromFilename = (path: string): string | undefined => {
   if (path.endsWith(".jpeg") || path.endsWith(".jpg")) return "image/jpeg";

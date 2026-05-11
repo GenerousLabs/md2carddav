@@ -5,6 +5,7 @@
     "check": "deno check src/main.ts"
   },
   "imports": {
+    "@subject/": "./src/",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0",
     "@std/fs": "jsr:@std/fs@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",

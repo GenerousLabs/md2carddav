@@ -1,7 +1,7 @@
 export const mockContext = (mdDirectory = '/tmp') => ({
   log: (..._args: any[]) => {},
   warn: (..._args: any[]) => {},
-  error: (..._args: any[]) => {},
+  error: (_message: string): never => { throw new Error(_message); },
   debug: (..._args: any[]) => {},
   config: {
     carddav: {
