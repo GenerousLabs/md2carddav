@@ -9,7 +9,8 @@ export const getFileContents = async (
       return { success: false, error: "File is empty #y3y4uK", code: "file.empty" };
     }
     return { success: true, result: contents };
-  } catch {
-    return { success: false, error: `Failed to read file: ${path}`, code: "file.read" };
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    return { success: false, error: `Failed to read file: ${path} (${reason})`, code: "file.read" };
   }
 };
