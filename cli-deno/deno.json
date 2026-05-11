@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "build": "deno compile --allow-net --allow-read --allow-write --allow-env -o md2carddav src/main.ts",
+    "build": "deno compile --allow-net --allow-read --allow-write --allow-env -o build/md2carddav src/main.ts",
     "test": "deno test --allow-net --allow-read --allow-write --allow-env test/",
     "check": "deno check src/main.ts"
   },
