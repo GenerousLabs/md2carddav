@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@subject/": "../../cli-deno/src/"
+  }
+}

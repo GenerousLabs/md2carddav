@@ -1,7 +1,12 @@
 {
   "extends": "../tsconfig",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@subject/*": ["../src/*"]
+    }
   },
   "references": [
     {"path": ".."}

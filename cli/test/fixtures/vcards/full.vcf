@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+UID:test-uid-002
+FN:Jane Anne Doe
+N:Doe;Jane;Anne;Dr.;
+ORG:Acme Corp
+TEL;TYPE=work:+1234567890
+TEL;TYPE=home:+0987654321
+EMAIL;TYPE=work:jane@acme.com
+ADR;TYPE=work:;;123 Main St;Springfield;IL;62701;USA
+URL:https://janedoe.com
+NOTE:Some notes about Jane.
+END:VCARD

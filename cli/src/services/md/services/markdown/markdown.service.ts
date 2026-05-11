@@ -1,4 +1,4 @@
-import * as matter from "gray-matter";
+import matter from "gray-matter";
 
 export const parseMarkdown = (
   markdown: string

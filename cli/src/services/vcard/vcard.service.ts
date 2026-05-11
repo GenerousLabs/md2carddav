@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-array-for-each */
 import { VCard } from "@covve/easy-vcard";
-import * as isEqual from "fast-deep-equal";
-import * as clean from "obj-clean";
+import isEqual from "fast-deep-equal";
+import clean from "obj-clean";
 import slugify from "slugify";
 import Vcfer from "vcfer";
 import { ContactSchema } from "../../shared.schemas";
