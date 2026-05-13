@@ -466,7 +466,7 @@ export const areVCardsEquivalent = (
     if (firstProps.length === 0 && secondProps.length === 0) continue;
 
     if (firstProps.length !== secondProps.length) {
-      debug("#Qp96DP found different prop counts when comparing vcards");
+      debug(`#Qp96DP found different "${propName}" counts: ${firstProps.length} vs ${secondProps.length}`);
       return false;
     }
 
