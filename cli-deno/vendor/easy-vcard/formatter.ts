@@ -133,7 +133,6 @@ export class Formatter {
       this.concatWith(name.honorificsPre),
       this.concatWith(name.honorificsSuf),
     ];
-    if (components.every((c) => c === "")) return "";
     const result = components.reduce(
       (acc, cur, idx) => acc + cur + (idx !== 4 ? ";" : ""),
       ""
