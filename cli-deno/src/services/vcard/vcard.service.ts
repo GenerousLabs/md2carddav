@@ -438,7 +438,8 @@ export const _arePhotosEquivalent = (
   return false;
 };
 
-const SKIP_PROPS: readonly string[] = ["version", "uid", "photo"] as const;
+// version/uid/photo compared separately; prodid+rev are server-generated metadata we never write
+const SKIP_PROPS: readonly string[] = ["version", "uid", "photo", "prodid", "rev"] as const;
 
 export const areVCardsEquivalent = (
   context: CommandContext,
